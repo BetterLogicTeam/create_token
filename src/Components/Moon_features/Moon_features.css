@@ -1,0 +1,14 @@
+.features_heading{
+    
+    text-align: left;
+    font-size: 2.5rem;
+    font-weight: 300;
+    line-height: 1.2;
+    margin-bottom: 10px;
+}
+
+.features_head{
+    border-bottom: 1px solid #dee2e6 !important;
+    margin-top: 10px;
+    margin-bottom: 3rem;
+}

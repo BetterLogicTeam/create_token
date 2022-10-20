@@ -1,0 +1,35 @@
+.main_heading{
+    font-size: 2.5rem;
+    font-weight: 300;
+    line-height: 1.2;
+}
+
+.Faq_heading{
+    border-bottom: 1px solid #000;
+    border-bottom: 1px solid #dee2e6!important;
+    margin-bottom: 3rem!important;
+    margin-top: 10px;
+}
+.faq_sub_heading{
+    font-size: 1.5rem;
+    font-weight: 500;
+    line-height: 1.2;
+}
+
+.faq_links:hover{
+  background-color: greenyellow;
+
+}
+
+.faq_icons{
+    color: rgb(67, 67, 231) !important;
+    margin-right: 5px !important;
+}
+
+
+@media only screen and (max-width:600px){
+    .main_heading{
+        text-align: left !important;
+        font-size: 2rem;
+    }
+}
