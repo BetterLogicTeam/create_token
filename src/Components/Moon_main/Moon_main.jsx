@@ -16,7 +16,7 @@ function Moon_main() {
         <Moon_token/>
         <Moon_choose/>
         <Moon_features/>
-      {/* <Moon_dev/> */}
+   
       <MoonFaq/>
       <Moon_u_footer/>
 

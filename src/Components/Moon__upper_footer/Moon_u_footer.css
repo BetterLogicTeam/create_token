@@ -23,3 +23,10 @@
     color:#6c757d;
     background-color: greenyellow;
 }
+
+
+@media only screen and (max-width:600px){
+    .width_res{
+        width: 220px !important;
+    }
+}

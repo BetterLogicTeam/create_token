@@ -18,7 +18,7 @@ function Moon_u_footer() {
         <div className="container">
             <div className="row mt-4 justify-content-around align-items-center">
              <div className="col-md-3 p-0">
-                <img src={moonh2} alt="" />
+                <img src={moonh2} className='width_res' alt="" />
              </div>
                 <div className="col-md-3">
                     <h6 className='text-start mb-4'> LINKS AND SERVICES</h6>
