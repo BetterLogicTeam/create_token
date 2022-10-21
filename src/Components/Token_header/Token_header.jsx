@@ -3,6 +3,7 @@ import "./Token_header.css"
 import moonh from "../Assets/moonh.png"
 import t2 from "../Assets/t2.png"
 import {Link} from"react-router-dom"
+import moonh2 from "../Assets/moonh2.png"
 
 function Token_header() {
   return (
@@ -12,7 +13,7 @@ function Token_header() {
                 <div>
                 <Link to='/'  className="navbar-brand">
       
-      <img src={moonh} alt="Moon Deploy" style={{height:'30px'}}/>
+      <img src={moonh2} alt="Moon Deploy" style={{height:'59px'}}/>
     </Link>
                 </div>
                 <div className='d-flex res_btn'>

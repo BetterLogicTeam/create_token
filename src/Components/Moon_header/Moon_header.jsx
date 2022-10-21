@@ -1,6 +1,6 @@
 import React from 'react'
 import "./Moon_header.css"
-import moonh from "../Assets/moonh.png"
+import moonh2 from "../Assets/moonh2.png"
 import { Link } from "react-router-dom"
 
 function Moon_header() {
@@ -10,7 +10,7 @@ function Moon_header() {
     <div className="container-fluid moon_head">
       <Link to='/'  className="navbar-brand">
       
-        <img src={moonh} alt="Moon Deploy" style={{height:'30px'}}/>
+        <img src={moonh2} alt="Moon Deploy" style={{width:'210px'}}/>
       </Link>
      
     </div>

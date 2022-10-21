@@ -1,7 +1,8 @@
 
 
 .moon_haeder_bg{
-    background-color: #f8f9fa!important;
+    /* background-color: #f8f9fa!important; */
+    background-color: white !important;
     display: flex;
     flex-wrap: wrap;
     align-items: center;

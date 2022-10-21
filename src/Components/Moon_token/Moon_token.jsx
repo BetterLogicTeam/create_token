@@ -1,6 +1,6 @@
 import React from 'react'
 import "./Moon_token.css"
-import intro from "../Assets/intro.gif"
+import intro from "../Assets/intro.jpeg"
 import t1 from "../Assets/t1.png"
 import t2 from "../Assets/t2.png"
 import t3 from "../Assets/t3.png"
@@ -34,9 +34,9 @@ function Moon_token() {
                 <h6 className='text-start token_sub_heading'>Powered by</h6>
                 <img src={t1} className='small_logo' alt="" />
                 <img src={t2} className='small_logo' alt="" />
-                <img src={t3} className='small_logo' alt="" />
+                {/* <img src={t3} className='small_logo' alt="" /> */}
                 <img src={t4} className='small_logo' alt="" />
-                <img src={t5} className='small_logo' alt="" />
+                {/* <img src={t5} className='small_logo' alt="" /> */}
                 <img src={t6} className='small_logo' alt="" />
                 <img src={t7} className='small_logo' alt="" />
                 </div>

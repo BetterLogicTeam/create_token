@@ -12,7 +12,7 @@ function Token_page() {
       <Token_main/>
       <Token_steps/>
       <Token_ut/>
-      <Token_footer/>
+      {/* <Token_footer/> */}
     </div>
   )
 }

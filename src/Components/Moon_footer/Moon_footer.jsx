@@ -8,7 +8,7 @@ function Moon_footer() {
             <div className="footer_main ">
                 <p className='p-0 m-0'>
       © 2021-2022 Copyright:
-      <a className='footer_link' href="#">  MoonDeploy</a></p>
+      <a className='footer_link' href="#">  Create Coin</a></p>
             </div>
 
         </div>

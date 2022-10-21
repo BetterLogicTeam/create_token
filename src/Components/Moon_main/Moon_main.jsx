@@ -7,14 +7,16 @@ import Moon_header from '../Moon_header/Moon_header'
 import Moon_token from '../Moon_token/Moon_token'
 import MoonFaq from '../MoonFaq/MoonFaq'
 import Moon_u_footer from '../Moon__upper_footer/Moon_u_footer'
+import Moon_choose from '../Moon_choose/Moon_choose'
 
 function Moon_main() {
   return (
     <div>
         <Moon_header/>
         <Moon_token/>
+        <Moon_choose/>
         <Moon_features/>
-      <Moon_dev/>
+      {/* <Moon_dev/> */}
       <MoonFaq/>
       <Moon_u_footer/>
 
