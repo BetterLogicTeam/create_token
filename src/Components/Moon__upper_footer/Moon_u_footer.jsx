@@ -7,14 +7,14 @@ import moonh2 from"../Assets/moonh2.png"
 function Moon_u_footer() {
   return (
     <div className='py-3 main_bg'>
-        <div className="container-fluid upper_content ">
+        {/* <div className="container-fluid upper_content ">
             <div className="d-flex justify-content-between py-3 px-3">
                 <p className='m-0'>Get connected with us:</p>
                 <BsTelegram className='footer_icon'></BsTelegram>
 
             </div>
 
-        </div>
+        </div> */}
         <div className="container">
             <div className="row mt-4 justify-content-around align-items-center">
              <div className="col-md-3 p-0">
