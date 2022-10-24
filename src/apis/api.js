@@ -1,8 +1,11 @@
 import Web3 from "web3";
 let isItConnected = false;
+var networks
+const handleChangeNetwork = async (networkName, id) => {
+//   if (networkName == "binance") { 
 const networks = {
   bsc: {
-    chainId: `0x${Number(97).toString(16)}`,
+    chainId: `0x${Number(id).toString(16)}`,
     chainName: "Binance smart chain",
     nativeCurrency: {
       name: "BSC",
@@ -27,14 +30,36 @@ const networks = {
     blockExplorerUrls: ["https://bscscan.com"],
   },
 };
-const changeNetwork = async ({ networkName }) => {
+}
+// else if (networkName == "MumbaiTestNet") {
+// networks = {
+//   bsc: {
+//     chainId: `0x${Number(id).toString(16)}`,
+//     chainName: "polygon smart chain",
+//     nativeCurrency: {
+//       name: "Mumbai TestNet",
+//       symbol: "MATIC",
+//       decimals: 18,
+//     },
+//     rpcUrls: [
+//       "https://mumbai-explorer.matic.today/",
+
+//     ],
+//     blockExplorerUrls: [" https://mumbai.polygonscan.com/"],
+//   },
+// };
+// }
+// }
+const changeNetwork = async ({ networkName, id }) => {
+  await handleChangeNetwork(networkName, id)
   try {
     if (!window.ethereum) throw new Error("No crypto wallet found");
     await window.ethereum.request({
       method: "wallet_addEthereumChain",
       params: [
         {
-          ...networks[networkName],
+          chainId: `0x${Number(id).toString(16)}`
+          // ...networks[networkName],
         },
       ],
     });
@@ -42,8 +67,8 @@ const changeNetwork = async ({ networkName }) => {
     console.log("not found");
   }
 };
-const handleNetworkSwitch = async (networkName) => {
-  await changeNetwork({ networkName });
+const handleNetworkSwitch = async (networkName, id) => {
+  await changeNetwork({ networkName, id });
 };
 let accounts;
 const getAccounts = async () => {
@@ -63,24 +88,49 @@ export const disconnectWallet = async () => {
   });
   console.log("disconnect");
 };
-export const loadWeb3 = async () => {
+export const loadWeb3 = async (id) => {
+  console.log('what is id', id)
   try {
     if (window.ethereum) {
       window.web3 = new Web3(window.ethereum);
       await window.ethereum.enable();
       await window.web3.eth.getChainId((err, netId) => {
+        if (netId == id.id) {
+          isItConnected = true;
+        }
+        else {
+          handleNetworkSwitch(id.networkName, id.id);
+          isItConnected = false;
+        }
         // console.log("networkId==>", netId);
         switch (netId.toString()) {
-          case "97":
-            isItConnected = true;
-            break;
-          default:
-            handleNetworkSwitch("bsc");
-            isItConnected = false;
+          // case '97':
+          //   isItConnected = true;
+          //   break;
+          // case '3':
+          //   isItConnected = true;
+          //   break;
+
+          // case netId.toString() === id.id:
+          //   isItConnected = true;
+          //   break;
+          // case netId.toString() === id.id.toString():
+          //   isItConnected = true;
+          //   break;
+          // case netId.toString() === id.id.toString():
+          //   isItConnected = true;
+          //   break;
+          // case netId.toString() === id.id.toString():
+          //   isItConnected = true;
+          //   break;
+          // default:
+          //   handleNetworkSwitch(id.networkName);
+          //   isItConnected = false;
         }
       });
       if (isItConnected == true) {
         let accounts = await getAccounts();
+        console.log('what is account', accounts)
         return accounts[0];
       } else {
         let res = "Wrong Network";

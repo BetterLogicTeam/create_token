@@ -8,21 +8,36 @@ import { loadWeb3 } from '../../apis/api';
 import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { loadWeb4 } from '../../apis/api2'
 function Token_header() {
   const [show, setShow] = useState(false);
   const [getAccount, setGetAccount] = useState(false);
+  const [acc, setAcc] = useState('');
+
 
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   let [btnTxt, setBtTxt] = useState("Connect")
   let [showwalleticon, setshowwalleticon] = useState(true)
+  const [chain, setChain] = useState({
+    name: "Hong Kong",
+
+    id: 1,
+  });
+  const selectOptions = [
+    { name: "binance", id: 97, networkName: 'binance' },
+    { name: "ethereum", id: 3, networkName: 'ethereum' },
+    { name: "polygon", id: 80001, networkName: 'MumbaiTestNet' },
+    { name: "avalanche", id: 43113, networkName: 'avalanche' },
+    { name: "tron", id: 1230, networkName: 'tron' },
 
 
+  ];
 
   const getaccount = async () => {
 
-    let acc = await loadWeb3();
+    // let acc = await loadWeb3();
     if (acc == "No Wallet") {
       toast.error('please install metamask')
     }
@@ -38,6 +53,14 @@ function Token_header() {
 
 
   }
+  const handleChange = async (value) => {
+    setChain(value)
+
+    let res = await loadWeb4(value);
+    toast(res)
+    // setAcc(res)
+
+  }
 
   return (
     <div className='token_main'>
@@ -50,7 +73,18 @@ function Token_header() {
             </Link>
           </div>
           <div className='d-flex res_btn'>
-            <button className='token_header_btn'> <img src={t2} style={{ width: '12px' }} alt="" /> <span className='btn_text'>BNB Smart Chain</span></button>
+            {/* <button className='token_header_btn'> <img src={t2} style={{ width: '12px' }} alt="" /> <span className='btn_text'>BNB Smart Chain</span></button> */}
+            <select className="form-select me-3" aria-label="multichain" value={JSON.stringify(chain)}
+              onChange={(e) => handleChange(JSON.parse(e.target.value))}>
+              <option >Please select</option>
+              {selectOptions.map((option, index) => {
+                return (
+                  <option key={index} value={JSON.stringify(option)}>
+                    {option?.name}
+                  </option>
+                );
+              })}
+            </select>
             <button className='connect_btn' onClick={getaccount}>{btnTxt}</button>
           </div>
         </div>
