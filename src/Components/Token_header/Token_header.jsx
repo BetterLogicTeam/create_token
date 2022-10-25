@@ -26,8 +26,9 @@ function Token_header() {
     id: 1,
   });
   const selectOptions = [
-    { name: "binance", id: 97, networkName: 'binance' },
-    { name: "ethereum", id: 3, networkName: 'ethereum' },
+    { name: "binance", id: 56, networkName: 'binance' },
+    { name: "binance test net", id: 97, networkName: 'binanceTestNet' },
+    { name: "ethereum", id: 1, networkName: 'ethereum' },
     { name: "polygon", id: 80001, networkName: 'MumbaiTestNet' },
     { name: "avalanche", id: 43113, networkName: 'avalanche' },
     { name: "tron", id: 1230, networkName: 'tron' },
@@ -56,7 +57,7 @@ function Token_header() {
   const handleChange = async (value) => {
     setChain(value)
 
-    let res = await loadWeb4(value);
+    let res = await loadWeb3(value.id);
     toast(res)
     // setAcc(res)
 

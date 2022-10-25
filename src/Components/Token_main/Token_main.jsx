@@ -1,7 +1,25 @@
 import React from 'react'
 import "./Token_main.css"
-
+import axios from "axios";
 function Token_main() {
+
+    const submit = async () => {
+
+        axios.post('http://localhost:3000/process_post', {
+            toekn_name: "bnb",
+            token_symbol: "$",
+            total_supply: 4565656,
+            decimals: 15
+        })
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.log(error);
+            });
+    }
+
+
     return (
         <div className='py-4'>
             <div className="container">
@@ -56,7 +74,7 @@ function Token_main() {
                                 <div className="col-md-6"><div>
                                     <input type="text" className='token_input' />
                                     <p className='input_para'>
-                                    Choose a symbol for your token (usually 3-5 chars).</p>
+                                        Choose a symbol for your token (usually 3-5 chars).</p>
                                 </div>
                                 </div>
                             </div>
@@ -69,7 +87,7 @@ function Token_main() {
                                 <div className="col-md-7"><div>
                                     <input type="number" className='token_input' placeholder='1000000000000' />
                                     <p className='input_para'>
-                                    Insert the initial number of tokens available. Will be put in your account..</p>
+                                        Insert the initial number of tokens available. Will be put in your account..</p>
                                 </div>
                                 </div>
                             </div>
@@ -82,11 +100,11 @@ function Token_main() {
                                 <div className="col-md-7"><div>
                                     <input type="number" className='token_input' placeholder='18' />
                                     <p className='input_para'>
-                                    Insert the decimal precision of your token.</p>
+                                        Insert the decimal precision of your token.</p>
                                 </div>
                                 </div>
                             </div>
-                            
+
                             <input type="checkbox" />
                             <strong className='ms-2'>Can Mint</strong><br />
                             <input type="checkbox" />
@@ -100,30 +118,30 @@ function Token_main() {
                 </div>
             </div>
             <div className="container">
-    <div className="row justify-content-center">
-        <div className="col-md-12">
-            
-    <p className='text-center green_para'>0.1 BNB</p>
-        </div>
-    </div>
-    <p style={{color:'#212529'}}>GAS fee will be added to final amount</p>
-    <div className="text-start">
-    <p className='text-start'>Network</p>
-    <select className='network_select' name="#" id="">
-        <option value="">Ethereum</option>
-        <option value="" selected>Binance Smart Chain</option>
-        <option value="">Matic(Polygon)</option>
-        <option value="">Fantom Opera</option>
-        <option value="">Cronos </option>
-        <option value="">Avalanche </option>
-        <option value="">DogeChain </option>
-    </select>
-    <p className='input_para'>Choose your network</p>
-    <div>
-        <button className='token_btn_select'>Create</button>
-    </div>
-    </div>
-</div>
+                <div className="row justify-content-center">
+                    <div className="col-md-12">
+
+                        <p className='text-center green_para'>0.1 BNB</p>
+                    </div>
+                </div>
+                <p style={{ color: '#212529' }}>GAS fee will be added to final amount</p>
+                <div className="text-start">
+                    <p className='text-start'>Network</p>
+                    <select className='network_select' name="#" id="">
+                        <option value="">Ethereum</option>
+                        <option value="" selected>Binance Smart Chain</option>
+                        <option value="">Matic(Polygon)</option>
+                        <option value="">Fantom Opera</option>
+                        <option value="">Cronos </option>
+                        <option value="">Avalanche </option>
+                        <option value="">DogeChain </option>
+                    </select>
+                    <p className='input_para'>Choose your network</p>
+                    <div>
+                        <button className='token_btn_select' onClick={submit}>Create</button>
+                    </div>
+                </div>
+            </div>
         </div>
     )
 }
