@@ -73,7 +73,23 @@
     outline: 0;
     box-shadow: 0 0 0 0.25rem rgb(13 110 253 / 25%);
 }
+.token_details{
+    display: flex;
+    justify-content: space-between;
+}
+.status{
+    background-color: #212529;
+    color: white;
+    padding: 10px 3rem 0px 3rem;
+}
+.btn_inner{
+    /* padding: 5px 3rem 10px 3rem; */
 
+}
+.inner_list_tag{
+    display: flex;
+    justify-content: space-between;
+}
 @media only screen and (max-width:600px){
     .responsive_made{
         flex-direction: column !important;

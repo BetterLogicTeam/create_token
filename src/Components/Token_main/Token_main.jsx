@@ -1,16 +1,25 @@
 import React, { useEffect, useState } from 'react'
 import "./Token_main.css"
 import axios from "axios";
+import { toast } from 'react-toastify';
+import Button from 'react-bootstrap/Button';
+import Modal from 'react-bootstrap/Modal';
 function Token_main({ address }) {
+
     const [tokenName, setTokenName] = useState('');
     const [tokenSymbol, setTokenSymbol] = useState('');
     const [totalSupply, setTotalSupply] = useState(0);
     const [decimals, setDecimals] = useState(0);
     const [selectedItem, setSelectedItem] = useState("");
     const [emailAddress, setEmailAddress] = useState("");
+    const [getToken, setgetToken] = useState([]);
+    const [getindex, setgetindex] = useState("");
+
+    const [modalShow, setModalShow] = React.useState(false);
 
 
 
+    // console.log("address", typeof address)
     // alert('what is address' + address)
 
     const [checkedOne, setCheckedOne] = useState(false);
@@ -28,42 +37,79 @@ function Token_main({ address }) {
     };
 
     function handleSelectChange(event) {
-        console.log('selected item', event.target.value)
+
+        // console.log('selected item', event.target.value)
         setSelectedItem(event.target.value);
+
     }
     const submit = async () => {
+        if (address == "No Wallet" || address == "") {
+            toast.error("No Wallet Connected")
+        }
+        else if (address == "Wrong Network" || address == "") {
+            toast.error("Wrong Newtwork please connect to Binance smart chain network")
 
-        axios.post('https://coin-creators.herokuapp.com/students', {
-            network_name: selectedItem,
-            tokenname: tokenName,
-            token_symbol: tokenSymbol,
-            total_supply: totalSupply,
-            decimals: decimals,
-            isMint: checkedOne.toString(),
-            isBurn: checkedTwo.toString(),
-            tokenType: selectedItem,
-            address: address,
-            email: emailAddress
-        })
-            .then(function (response) {
-                console.log(response);
+        } else {
+
+            axios.post('http://localhost:3300/students', {
+                network_name: selectedItem,
+                tokenname: tokenName,
+                token_symbol: tokenSymbol,
+                total_supply: totalSupply,
+                decimals: decimals,
+                isMint: checkedOne.toString(),
+                isBurn: checkedTwo.toString(),
+                tokenType: selectedItem,
+                address: address,
+                email: emailAddress
             })
-            .catch(function (error) {
-                console.log(error.message);
-            });
+                .then(function ({ data }) {
+                    console.log("data", data);
+                    let { msg, success } = data;
+                    success ? toast.success(msg) : toast.error(msg)
+                    // toast.success(data.msg)
+                })
+                .catch(function (error) {
+                    console.log(error.message);
+                });
+        }
     }
+
+    const get_Token_list = async () => {
+
+        if (address == "No Wallet" || address == "") {
+            toast.error("No Wallet Connected")
+        }
+        else if (address == "Wrong Network" || address == "") {
+            toast.error("Wrong Newtwork please connect to Binance smart chain network")
+
+        } else {
+            try {
+                console.log("address", address);
+                let res = await axios.get(`http://localhost:3300/students?address=${address}`)
+                console.log("RES", res.data);
+                setgetToken(res.data)
+
+            } catch (e) {
+                console.log("Error While Call Get API", e);
+            }
+        }
+    }
+
+
+
+
+
     // console.log('what is token name', typeof tokenName, typeof tokenSymbol, typeof parseInt(totalSupply), typeof decimals, typeof checkedOne, typeof checkedTwo)
     useEffect(() => {
-        axios.get('https://coin-creators.herokuapp.com/students')
-            .then(function (response) {
-                console.log(response);
-            })
-            .catch(function (error) {
-                console.log(error.message);
-            });
+        get_Token_list()
+        let id = setInterval(() => {
 
-
-    }, []);
+        }, 1000);
+        return () => {
+            clearInterval(id)
+        }
+    }, [address]);
 
     return (
         <div className='py-4'>
@@ -71,6 +117,84 @@ function Token_main({ address }) {
                 <h1 className='token_main_heading text-start'>Create your token</h1>
                 <p className="lead text-start mb-3">Simple. No coding required.</p>
             </div>
+
+            {/* {
+
+                modalShow == true ?
+                    <>
+                        <Modal
+                            // {...props}
+                            show={modalShow}
+                            size="lg"
+                            aria-labelledby="contained-modal-title-vcenter"
+                            centered
+                        >
+                            <Modal.Header closeButton>
+                                <Modal.Title id="contained-modal-title-vcenter">
+                                    Token Deatils
+                                </Modal.Title>
+                            </Modal.Header>
+                            <Modal.Body>
+                                <div className="token_list">
+                                    <div className="inner_list_tag">
+                                        <h6> Network :</h6>
+                                        <h6>{getToken[getindex].network_name}</h6>
+                                    </div>
+                                    <div className="inner_list_tag">
+                                        <h6> Token name :</h6>
+                                        <h6>{getToken[getindex].tokenname}</h6>
+                                    </div>
+                                    <div className="inner_list_tag">
+                                        <h6>  Metamask :</h6>
+                                        <h6>{getToken[getindex].address}</h6>
+                                    </div>
+                                    <div className="inner_list_tag">
+                                        <h6>   Token symbol :</h6>
+                                        <h6>{getToken[getindex].token_symbol}</h6>
+                                    </div>
+                                    <div className="inner_list_tag">
+                                        <h6>Total supply :</h6>
+                                        <h6>{getToken[getindex].total_supply}</h6>
+
+                                    </div>
+                                    <div className="inner_list_tag">
+                                        <h6>Decimals :</h6>
+                                        <h6>{getToken[getindex].decimals}</h6>
+
+                                    </div>
+                                    <div className="inner_list_tag">
+                                        <h6>Email Address :</h6>
+                                        <h6>{getToken[getindex].email}</h6>
+
+                                    </div>
+                                    <div className="inner_list_tag">
+                                        <h6>Can Mint :</h6>
+                                        <h6>{getToken[getindex].isMint}</h6>
+
+                                    </div>
+                                    <div className="inner_list_tag">
+                                        <h6> Can Burn :</h6>
+                                        <h6>{getToken[getindex].isBurn}</h6>
+
+                                    </div>
+
+
+                                </div>
+                            </Modal.Body>
+                            <Modal.Footer>
+                                <Button onClick={() => setModalShow(false)} >Close</Button>
+                            </Modal.Footer>
+                        </Modal>
+
+
+                    </>
+                    :
+                    <>
+                    </>
+
+
+
+            } */}
             {/* <div className="container text-start">
                 <p className='p-0 m-0 text-start'>Token type</p>
                 <select className='token_select'  >
@@ -193,15 +317,95 @@ function Token_main({ address }) {
                 <div>
                     <button className='token_btn_select' onClick={submit}>Create</button>
                 </div>
-                {/* <div className="row justify-content-center">
-                    <div className="col-md-12">
 
-                        <p className='text-center green_para'>0.1 BNB</p>
-                    </div>
-                </div> */}
                 <p style={{ color: '#212529' }}>GAS fee will be added to final amount</p>
 
             </div>
+
+            <div className="container">
+
+                <div className="list_token">
+
+                    <h1 className='token_main_heading text-start'>Your token List</h1>
+
+                    <div className="inner_list">
+                        <div className="main_div_list">
+                            <div class="table-responsive">
+                                <table class="table table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col">Address</th>
+                                            <th scope="col">Network</th>
+                                            <th scope="col">Token name</th>
+                                            <th scope="col">Token symbol</th>
+                                            <th scope="col">Total supply</th>
+
+                                            <th scope="col">Decimals</th>
+
+                                            <th scope="col">Email Address</th>
+
+                                            <th scope="col">Can Mint</th>
+
+                                            <th scope="col">Can Burn</th>
+                                            <th scope="col">Status</th>
+
+
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+
+                                        {
+
+                                            getToken.map((items, index) => {
+                                                console.log("Addres", items.address)
+                                                return (
+                                                    <>
+
+                                                        <tr>
+                                                            <td >{items.address?.substring(0, 8) + "..." + items.address?.substring(items.address?.length - 8)}</td>
+                                                            <td>{items?.network_name}</td>
+                                                            <td>{items?.tokenname}</td>
+                                                            <td>{items?.token_symbol}</td>
+                                                            <td>{items?.total_supply}</td>
+                                                            <td>{items?.decimals}</td>
+                                                            <td>{items?.email}</td>
+                                                            <td>{items?.isMint}</td>
+                                                            <td>{items?.isBurn}</td>
+                                                            <td>{items?.isDeploy == false ? <>Padding</> : <> Deploy</>}</td>
+
+
+
+
+                                                        </tr>
+
+
+
+                                                    </>
+                                                )
+                                            })
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+
+
+
+
+
+                        </div>
+
+
+
+                    </div>
+
+
+                </div>
+            </div>
+
+
+
+
         </div>
     )
 }
