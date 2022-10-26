@@ -1,4 +1,5 @@
 import Web3 from "web3";
+var isItConnected = false;
 
 
 const changeNetwork = async (id) => {
@@ -9,6 +10,9 @@ const changeNetwork = async (id) => {
       method: 'wallet_switchEthereumChain',
       params: [{ chainId: web3.utils.toHex(id) }]
     });
+
+
+
 
   } catch (err) {
     console.log(err, "not found");
@@ -36,7 +40,6 @@ export const disconnectWallet = async () => {
   console.log("disconnect");
 };
 export const loadWeb3 = async (id) => {
-  let isItConnected = false;
   try {
     if (window.ethereum) {
       window.web3 = new Web3(window.ethereum);
@@ -44,14 +47,28 @@ export const loadWeb3 = async (id) => {
       await window.web3.eth.getChainId(async (err, netId) => {
         if (netId == id) {
           isItConnected = true;
+
         }
         else {
+          isItConnected = true;
           await handleNetworkSwitch(id);
+          // await getAccounts()
+
+
+          // console.log('accounts', isItConnected)
+
         }
       });
+      // console.log('accounts my')
+
       if (isItConnected == true) {
         let accounts = await getAccounts();
+        // isItConnected = true;
+        isItConnected = false;
+
+        console.log('accounts', accounts)
         return accounts[0];
+
       }
     } else {
       let res = "No Wallet";

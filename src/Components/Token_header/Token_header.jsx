@@ -9,12 +9,12 @@ import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { loadWeb4 } from '../../apis/api2'
-function Token_header() {
+function Token_header({ setAddress }) {
   const [show, setShow] = useState(false);
   const [getAccount, setGetAccount] = useState(false);
   const [acc, setAcc] = useState('');
 
-
+  // alert(acc)
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -56,10 +56,11 @@ function Token_header() {
   }
   const handleChange = async (value) => {
     setChain(value)
-
     let res = await loadWeb3(value.id);
-    toast(res)
-    // setAcc(res)
+    console.log("LoadWeb3", res);
+    // toast(res)
+    setAcc(res)
+    setAddress(res)
 
   }
 
