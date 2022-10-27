@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import "./Token_header.css"
 import moonh from "../Assets/moonh.png"
 import t2 from "../Assets/t2.png"
@@ -35,6 +35,7 @@ function Token_header({ setAddress }) {
 
 
   ];
+  // console.log('WHAT IS ID', selectOptions[0].id)
 
   const getaccount = async () => {
 
@@ -56,6 +57,8 @@ function Token_header({ setAddress }) {
   }
   const handleChange = async (value) => {
     setChain(value)
+    localStorage.setItem("NETWORKID", (value.id));
+
     let res = await loadWeb3(value.id);
     console.log("LoadWeb3", res);
     // toast(res)
@@ -63,6 +66,21 @@ function Token_header({ setAddress }) {
     setAddress(res)
 
   }
+  useEffect(() => {
+
+
+    const init = async () => {
+      let id = localStorage.getItem("NETWORKID");
+
+      console.log('what is first result', id)
+      let res = await loadWeb3(id);
+      setAcc(res)
+      setAddress(res)
+
+
+    }
+    init()
+  }, []);
 
   return (
     <div className='token_main'>

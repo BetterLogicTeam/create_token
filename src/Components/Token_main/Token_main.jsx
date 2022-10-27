@@ -4,8 +4,8 @@ import axios from "axios";
 import { toast } from 'react-toastify';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
+import { loadWeb3 } from '../../apis/api';
 function Token_main({ address }) {
-
     const [tokenName, setTokenName] = useState('');
     const [tokenSymbol, setTokenSymbol] = useState('');
     const [totalSupply, setTotalSupply] = useState(0);
@@ -43,6 +43,11 @@ function Token_main({ address }) {
 
     }
     const submit = async () => {
+        let id = localStorage.getItem("NETWORKID");
+
+        let address = await loadWeb3(id);
+        console.log('what is first result', id)
+
         if (address == "No Wallet" || address == "") {
             toast.error("No Wallet Connected")
         }
@@ -51,7 +56,7 @@ function Token_main({ address }) {
 
         } else {
 
-            axios.post('http://localhost:3300/students', {
+            axios.post('https://coin-creators.herokuapp.com/students', {
                 network_name: selectedItem,
                 tokenname: tokenName,
                 token_symbol: tokenSymbol,
@@ -76,6 +81,9 @@ function Token_main({ address }) {
     }
 
     const get_Token_list = async () => {
+        let id = localStorage.getItem("NETWORKID");
+
+        let address = await loadWeb3(id);
 
         if (address == "No Wallet" || address == "") {
             toast.error("No Wallet Connected")
@@ -86,7 +94,7 @@ function Token_main({ address }) {
         } else {
             try {
                 console.log("address", address);
-                let res = await axios.get(`http://localhost:3300/students?address=${address}`)
+                let res = await axios.get(`https://coin-creators.herokuapp.com/students?address=${address}`)
                 console.log("RES", res.data);
                 setgetToken(res.data)
 

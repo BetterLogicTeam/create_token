@@ -66,7 +66,7 @@ export const loadWeb3 = async (id) => {
         // isItConnected = true;
         isItConnected = false;
 
-        console.log('accounts', accounts)
+        // console.log('accounts', accounts)
         return accounts[0];
 
       }
