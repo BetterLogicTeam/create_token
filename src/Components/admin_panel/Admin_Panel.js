@@ -1,5 +1,7 @@
 import axios from 'axios';
-// import { Button, Modal } from 'bootstrap';
+// import '/panel.css';
+import './panel.css';
+
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import React, { useEffect, useState } from 'react';
@@ -103,27 +105,28 @@ function AdminPanel({ address }) {
     }, []);
     console.log('urllenght', url.length)
     return (<>
-        <div className=''> Welcome to Admin Panel</div>
+        <h2 className='' style={{ color: "#5b53a2" }}> Welcome to Admin Panel</h2>
         <Tabs
             id="controlled-tab-example"
             activeKey={key}
             onSelect={(k) => setKey(k)}
             className="mb-3"
             defaultActiveKey="Pending"
+
         >
             <Tab eventKey="Pending" title="Pending">
                 <div className="container">
 
                     <div className="list_token">
 
-                        <h1 className='token_main_heading text-start'>Your pending token List</h1>
+                        <h3 className=' text-start' style={{ color: "#5b53a2" }}>Your pending token List</h3>
 
                         <div className="inner_list">
                             <div className="main_div_list">
                                 <div class="table-responsive">
                                     <table class="table table-striped">
                                         <thead>
-                                            <tr>
+                                            <tr style={{ color: "#5b53a2" }}>
                                                 <th scope="col">Address</th>
                                                 <th scope="col">Token name</th>
                                                 <th scope="col">Read More</th>
@@ -151,7 +154,7 @@ function AdminPanel({ address }) {
                                                                 }} >
                                                                     <a className='text-decoration-none' style={{ cursor: 'pointer' }}>After Deploy</a></td>
 
-                                                                <td>{items?.isDeploy == false ? <>Padding</> : <> Deploy</>}</td>
+                                                                <td>{items?.isDeploy == false ? <>Pendding</> : <> Deploy</>}</td>
 
                                                             </tr>
 
@@ -181,52 +184,52 @@ function AdminPanel({ address }) {
                                 aria-labelledby="contained-modal-title-vcenter"
                                 centered
                             >
-                                <Modal.Header closeButton onClick={() => setModalShow(false)}>
-                                    <Modal.Title id="contained-modal-title-vcenter">
+                                <Modal.Header style={{ color: "#5b53a2" }} closeButton onClick={() => setModalShow(false)}>
+                                    <Modal.Title id="contained-modal-title-vcenter" >
                                         Token Deatils
                                     </Modal.Title>
                                 </Modal.Header>
-                                <Modal.Body>
+                                <Modal.Body style={{ color: "#5b53a2" }}>
                                     <div className="token_list">
                                         <div className="inner_list_tag">
                                             <h6> Network :</h6>
-                                            <h6>{getToken[getindex].network_name}</h6>
+                                            <h6 className='text-dark'>{getToken[getindex].network_name}</h6>
                                         </div>
                                         <div className="inner_list_tag">
                                             <h6> Token name :</h6>
-                                            <h6>{getToken[getindex].tokenname}</h6>
+                                            <h6 className='text-dark'>{getToken[getindex].tokenname}</h6>
                                         </div>
                                         <div className="inner_list_tag">
                                             <h6>  Metamask :</h6>
-                                            <h6>{getToken[getindex].address}</h6>
+                                            <h6 className='text-dark'>{getToken[getindex].address}</h6>
                                         </div>
                                         <div className="inner_list_tag">
                                             <h6>   Token symbol :</h6>
-                                            <h6>{getToken[getindex].token_symbol}</h6>
+                                            <h6 className='text-dark'>{getToken[getindex].token_symbol}</h6>
                                         </div>
                                         <div className="inner_list_tag">
                                             <h6>Total supply :</h6>
-                                            <h6>{getToken[getindex].total_supply}</h6>
+                                            <h6 className='text-dark'>{getToken[getindex].total_supply}</h6>
 
                                         </div>
                                         <div className="inner_list_tag">
                                             <h6>Decimals :</h6>
-                                            <h6>{getToken[getindex].decimals}</h6>
+                                            <h6 className='text-dark'>{getToken[getindex].decimals}</h6>
 
                                         </div>
                                         <div className="inner_list_tag">
                                             <h6>Email Address :</h6>
-                                            <h6>{getToken[getindex].email}</h6>
+                                            <h6 className='text-dark'>{getToken[getindex].email}</h6>
 
                                         </div>
                                         <div className="inner_list_tag">
                                             <h6>Can Mint :</h6>
-                                            <h6>{getToken[getindex].isMint}</h6>
+                                            <h6 className='text-dark'>{getToken[getindex].isMint}</h6>
 
                                         </div>
                                         <div className="inner_list_tag">
                                             <h6> Can Burn :</h6>
-                                            <h6>{getToken[getindex].isBurn}</h6>
+                                            <h6 className='text-dark'>{getToken[getindex].isBurn}</h6>
 
                                         </div>
 
@@ -234,7 +237,7 @@ function AdminPanel({ address }) {
                                     </div>
                                 </Modal.Body>
                                 <Modal.Footer>
-                                    <Button onClick={() => setModalShow(false)} >Close</Button>
+                                    <button onClick={() => setModalShow(false)} className=" btn " style={{ color: "white", backgroundColor: "#5b53a2" }}>Close</button>
                                 </Modal.Footer>
                             </Modal>
 
@@ -261,19 +264,19 @@ function AdminPanel({ address }) {
                                 centered
                             >
                                 <Modal.Header closeButton onClick={() => setafterdeploy(false)}>
-                                    <Modal.Title id="contained-modal-title-vcenter">
+                                    <Modal.Title id="contained-modal-title-vcenter" style={{ color: "#5b53a2" }}>
                                         After Deploy
                                     </Modal.Title>
                                 </Modal.Header>
                                 <Modal.Body>
                                     <div className="token_list">
                                         <div class="mb-3">
-                                            <label for="exampleFormControlInput1" class="form-label">Enter Url</label>
+                                            <label for="exampleFormControlInput1" class="form-label" style={{ color: "#5b53a2" }}>Enter Url</label>
                                             <input type="text" value={url} class="form-control" placeholder="Enter url Here" onChange={(e) => { setUrl(e.target.value) }} />
                                         </div>
-                                        <div class="form-check">
+                                        <div class="form-check" style={{ color: "#5b53a2" }}>
                                             <input class="form-check-input" type="checkbox" name={ischecked} checked={ischecked} onChange={updateOne} />
-                                            <label class="form-check-label" for="flexCheckDefault">
+                                            <label class="form-check-label" for="flexCheckDefault" >
                                                 Is Deploy
                                             </label>
 
@@ -283,9 +286,9 @@ function AdminPanel({ address }) {
                                     </div>
                                 </Modal.Body>
                                 <Modal.Footer>
-                                    <Button onClick={() => { submit() }} disabled={(ischecked == false) || (url.toString().length == 0)} >submit</Button>
+                                    <Button onClick={() => { submit() }} disabled={(ischecked == false) || (url.toString().length == 0)} className=" btn " style={{ color: "white", backgroundColor: "#5b53a2" }}>submit</Button>
 
-                                    <Button onClick={() => setafterdeploy(false)} >Close</Button>
+                                    <Button onClick={() => setafterdeploy(false)} className=" btn " style={{ color: "white", backgroundColor: "#5b53a2" }} >Close</Button>
                                 </Modal.Footer>
                             </Modal>
 
@@ -305,14 +308,14 @@ function AdminPanel({ address }) {
 
                     <div className="list_token">
 
-                        <h1 className='token_main_heading text-start'>Your Deploy token List</h1>
+                        <h3 className=' text-start' style={{ color: "#5b53a2" }}>Your Deploy token List</h3>
 
                         <div className="inner_list">
                             <div className="main_div_list">
                                 <div class="table-responsive">
                                     <table class="table table-striped">
                                         <thead>
-                                            <tr>
+                                            <tr style={{ color: "#5b53a2" }}>
                                                 <th scope="col">Address</th>
                                                 <th scope="col">Network</th>
                                                 <th scope="col">Token name</th>

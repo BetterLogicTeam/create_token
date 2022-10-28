@@ -1,8 +1,8 @@
-.blue{
-    color: rgb(103, 112, 243);
+.blue {
+    color: #5b53a2 !important
 }
 
-.step_heading{
+.step_heading {
     text-decoration: underline;
     margin-top: 0;
     margin-bottom: 0.5rem;

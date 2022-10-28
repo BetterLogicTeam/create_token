@@ -52,21 +52,18 @@ export const loadWeb3 = async (id) => {
         else {
           isItConnected = true;
           await handleNetworkSwitch(id);
-          // await getAccounts()
 
-
-          // console.log('accounts', isItConnected)
 
         }
       });
-      // console.log('accounts my')
+
 
       if (isItConnected == true) {
         let accounts = await getAccounts();
-        // isItConnected = true;
+
         isItConnected = false;
 
-        // console.log('accounts', accounts)
+
         return accounts[0];
 
       }

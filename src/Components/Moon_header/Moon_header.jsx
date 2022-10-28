@@ -6,16 +6,16 @@ import { Link } from "react-router-dom"
 function Moon_header() {
   return (
     <div className='moon_haeder_bg'>
-      <div className=" moon_haeder_bg bg-light">
-    <div className="container-fluid moon_head">
-      <Link to='/'  className="navbar-brand">
-      
-        <img src={moonh2} alt="Moon Deploy" style={{width:'210px'}}/>
-      </Link>
-     
-    </div>
-  </div>
-      
+      <div className=" moon_haeder_bg">
+        <div className="container-fluid moon_head">
+          <Link to='/' className="navbar-brand">
+
+            <img src={moonh2} alt="Moon Deploy" style={{ width: '210px' }} />
+          </Link>
+
+        </div>
+      </div>
+
     </div>
   )
 }

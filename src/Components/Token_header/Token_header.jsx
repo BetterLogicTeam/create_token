@@ -14,7 +14,6 @@ function Token_header({ setAddress }) {
   const [getAccount, setGetAccount] = useState(false);
   const [acc, setAcc] = useState('');
 
-  // alert(acc)
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
@@ -35,7 +34,6 @@ function Token_header({ setAddress }) {
 
 
   ];
-  // console.log('WHAT IS ID', selectOptions[0].id)
 
   const getaccount = async () => {
 
@@ -76,11 +74,12 @@ function Token_header({ setAddress }) {
       let res = await loadWeb3(id);
       setAcc(res)
       setAddress(res)
+      getaccount()
 
 
     }
     init()
-  }, []);
+  });
 
   return (
     <div className='token_main'>
@@ -105,7 +104,7 @@ function Token_header({ setAddress }) {
                 );
               })}
             </select>
-            <button className='connect_btn' onClick={getaccount}>{btnTxt}</button>
+            <button className='connect_btn'>{btnTxt}</button>
           </div>
         </div>
 

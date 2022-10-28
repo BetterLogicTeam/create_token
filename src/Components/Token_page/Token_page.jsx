@@ -16,7 +16,6 @@ const [address, setAddres] = useState('');
   const myfun = async () => {
     let id = localStorage.getItem("NETWORKID");
 
-    // console.log('what is first result', id)
     let res = await loadWeb3(id);
     if (res == '0x4Cfd57AfD2DD6934eF72458450ea8A4F13eDFE2d') {
       setAddres(res)
@@ -25,7 +24,6 @@ const [address, setAddres] = useState('');
     else {
       setINotUser(false)
     }
-    // console.log('what is first result', res)
 
   }
   useEffect(() => {

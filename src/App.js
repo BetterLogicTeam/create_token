@@ -8,15 +8,10 @@ import { toast, ToastContainer } from 'react-toastify';
 import { useState } from 'react';
 
 
-
-
 function App() {
   const [address, setAddress] = useState('');
-  // console.log('adress in app', address)
   return (
     <div className="App">
-
-
       <Router>
         <ToastContainer />
 
