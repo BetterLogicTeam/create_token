@@ -20,7 +20,6 @@ function AdminPanel({ address }) {
     const [deploy, setDeploy] = useState([]);
 
     const [getindex, setgetindex] = useState("");
-    // const [getindex2, setgetindex2] = useState("");
 
     const [modalShow, setModalShow] = React.useState(false);
     const [afterdeploy, setafterdeploy] = React.useState(false);
@@ -30,13 +29,12 @@ function AdminPanel({ address }) {
 
 
     const updateOne = async (e) => {
-        // console.log(e.target.checked)
-        // console.log(e.target.name)
 
         setisChecked((prev) => !prev)
     };
     const submit = async () => {
         let userName = getToken[getindex].tokenname
+
         setafterdeploy(false)
         try {
             await axios
@@ -44,15 +42,15 @@ function AdminPanel({ address }) {
                     isDeploy: ischecked,
                     url: url
                 }).then(function ({ data }) {
-                    console.log("data", data);
+                    // console.log("data", data);
                     let { msg, success } = data;
+
                     success ? toast.success(msg) : toast.error(msg)
                     // toast.success(data.msg)
                 })
                 .catch(function (error) {
                     toast.error(error.message)
 
-                    // console.log(error.message);
                 });
         } catch (error) {
             toast.error(error.message)
@@ -79,14 +77,10 @@ function AdminPanel({ address }) {
                     setgetToken(res.data)
                 }
                 )
-
                 let deploy = await axios.get(`https://coin-creators.herokuapp.com/deploy?id=1`).then((res) => {
                     setDeploy(res.data)
-
                 }
                 )
-
-
 
             } catch (e) {
                 console.log("Error While Call Get API", e);

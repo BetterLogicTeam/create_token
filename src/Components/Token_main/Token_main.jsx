@@ -31,15 +31,11 @@ function Token_main({ address }) {
             console.log('Enter valid Email!')
         }
     }
-    // copy('T);
 
-    // console.log("address", typeof address)
-    // alert('what is address' + address)
 
     const [checkedOne, setCheckedOne] = useState(false);
     const updateOne = async (e) => {
-        // console.log(e.target.checked)
-        // console.log(e.target.name)
+
 
         setCheckedOne((prev) => !prev)
     };
@@ -48,14 +44,13 @@ function Token_main({ address }) {
         setcopied(true);
     };
     const updateTwo = (e) => {
-        // console.log(e.target.checked)
-        // console.log(e.target.name)
+
         setCheckedTwo((prev) => !prev)
     };
 
     function handleSelectChange(event) {
 
-        // console.log('selected item', event.target.value)
+
         setSelectedItem(event.target.value);
 
     }
@@ -130,9 +125,6 @@ function Token_main({ address }) {
 
 
 
-
-
-    // console.log('what is token name', typeof tokenName, typeof tokenSymbol, typeof parseInt(totalSupply), typeof decimals, typeof checkedOne, typeof checkedTwo)
     useEffect(() => {
         get_Token_list()
         let id = setInterval(() => {
@@ -410,18 +402,13 @@ function Token_main({ address }) {
                                                             <td>{items?.network_name}</td>
                                                             <td>{items?.tokenname}</td>
                                                             <td>{items?.email}</td>
-
                                                             <td>{items?.token_symbol}</td>
                                                             <td>{items?.total_supply}</td>
                                                             <td>{items?.decimals}</td>
                                                             <td>{items?.isMint}</td>
                                                             <td>{items?.isBurn}</td>
 
-
                                                             {items.isDeploy == true ? <td id="myInput" onClick={() => { copy(items.url); toast('copied') }}><input className='no-outline' type="text" value={items?.url} /> </td > : <td >{''}</td>}
-
-
-
 
                                                             <td className={items?.isDeploy == false ? 'text-danger' : 'text-success'}>{items?.isDeploy == false ? <>Pending</> : <> Deploy</>}</td>
 
@@ -429,8 +416,6 @@ function Token_main({ address }) {
 
 
                                                         </tr>
-
-
 
                                                     </>
                                                 )
@@ -440,13 +425,7 @@ function Token_main({ address }) {
                                 </table>
                             </div>
 
-
-
-
-
                         </div>
-
-
 
                     </div>
 
