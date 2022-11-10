@@ -41,7 +41,6 @@ function Token_main({ address }) {
 
 
     const [checkedOne, setCheckedOne] = useState(false);
-    const [val1, setval1] = useState(0);
     const updateOne = async (e) => {
         setCheckedOne((prev) => !prev)
         
@@ -49,7 +48,6 @@ function Token_main({ address }) {
     };
 
     const [checkedTwo, setCheckedTwo] = useState(false);
-    const [val2, setval2] = useState(0);
     const updateTwo = (e) => {
         setCheckedTwo((prev) => !prev)
 
