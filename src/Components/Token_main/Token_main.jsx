@@ -8,6 +8,10 @@ import { loadWeb3 } from '../../apis/api';
 import validator from 'validator';
 import { CopyToClipboard, onCopy } from 'react-copy-to-clipboard';
 import copy from 'copy-to-clipboard';
+import { CoinCreator, CoinCreator_Abi } from '../../utilies/Contract';
+import { token, token_Abi } from '../../utilies/Contract';
+
+import Web3 from 'web3'
 
 function Token_main({ address }) {
     const [tokenName, setTokenName] = useState('');
@@ -17,6 +21,9 @@ function Token_main({ address }) {
     const [selectedItem, setSelectedItem] = useState("");
     const [emailAddress, setEmailAddress] = useState("");
     const [getToken, setgetToken] = useState([]);
+ 
+
+
     let [copied, setcopied] = useState(false)
 
     // const [getindex, setgetindex] = useState("");
@@ -34,28 +41,44 @@ function Token_main({ address }) {
 
 
     const [checkedOne, setCheckedOne] = useState(false);
+    const [val1, setval1] = useState(0);
     const updateOne = async (e) => {
-
-
         setCheckedOne((prev) => !prev)
+        
+       
     };
+
     const [checkedTwo, setCheckedTwo] = useState(false);
+    const [val2, setval2] = useState(0);
+    const updateTwo = (e) => {
+        setCheckedTwo((prev) => !prev)
+
+    };
+
+
     onCopy = () => {
         setcopied(true);
     };
-    const updateTwo = (e) => {
 
-        setCheckedTwo((prev) => !prev)
-    };
 
+  
+
+
+    
     function handleSelectChange(event) {
 
 
         setSelectedItem(event.target.value);
 
     }
+
+
     const submit = async () => {
         var email = emailAddress
+        console.log(checkedOne,"val1");
+        console.log(checkedTwo,"val2");
+       
+        
 
         if (validator.isEmail(email)) {
             let id = localStorage.getItem("NETWORKID");
@@ -70,6 +93,34 @@ function Token_main({ address }) {
                 toast.error("Wrong Newtwork please connect to Binance smart chain network")
 
             } else {
+                const web3 = window.web3;
+                let CoinCreatorcontractOf = new web3.eth.Contract(CoinCreator_Abi, CoinCreator);
+                let tokencontractOf = new web3.eth.Contract(token_Abi, token);
+                let amount;
+                if(checkedOne ==false && checkedTwo ==false){
+                    amount=10
+                }
+               else if(checkedOne ==true && checkedTwo ==true){
+                    amount=30
+                }
+               else if(checkedOne ==false && checkedTwo ==true){
+                    amount=20
+                }
+                if(checkedOne ==true && checkedTwo ==false){
+                    amount=20
+                }
+
+                let amountBUSD=  web3.utils.toWei(amount.toString())
+                console.log(amountBUSD,"amt");
+                let ApproveToken = await tokencontractOf.methods.approve(CoinCreator, amountBUSD.toString()).send({
+                    from: address,
+                });
+                let TransferToken = await CoinCreatorcontractOf.methods.TransferToken( amountBUSD.toString()).send({
+                    from: address,
+                });
+
+
+
 
                 axios.post('https://coin-creators.herokuapp.com/students', {
                     network_name: selectedItem,
@@ -329,7 +380,7 @@ function Token_main({ address }) {
                                 </div>
                                 </div>
                             </div>
-
+                            
                             <input type="checkbox" name={checkedOne ? null : 'Can Mint'} checked={checkedOne} onChange={updateOne} />
                             <strong className='ms-2'>Can Mint</strong><br />
                             <input type="checkbox" name={checkedTwo ? null : "Can Burn"} checked={checkedTwo} onChange={updateTwo} />
