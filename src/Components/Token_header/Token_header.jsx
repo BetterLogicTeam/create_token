@@ -9,15 +9,20 @@ import { toast } from 'react-toastify'
 import 'react-toastify/dist/ReactToastify.css';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import { loadWeb4 } from '../../apis/api2'
+import TronWeb from 'tronweb'
+
 function Token_header({ setAddress }) {
   const [show, setShow] = useState(false);
   const [getAccount, setGetAccount] = useState(false);
   const [acc, setAcc] = useState('');
+  const [account, setaccount] = useState(null)
 
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
   let [btnTxt, setBtTxt] = useState("Connect")
+  const [tronAddress, settronAddress] = useState('')
+
   let [showwalleticon, setshowwalleticon] = useState(true)
   const [chain, setChain] = useState({
     name: "Hong Kong",
@@ -26,40 +31,75 @@ function Token_header({ setAddress }) {
   });
   const selectOptions = [
     { name: "binance", id: 56, networkName: 'binance' },
-    { name: "binance test net", id: 97, networkName: 'binanceTestNet' },
     { name: "ethereum", id: 1, networkName: 'ethereum' },
     { name: "polygon", id: 80001, networkName: 'MumbaiTestNet' },
-    { name: "avalanche", id: 43113, networkName: 'avalanche' },
+    { name: "avalanche", id: 43114, networkName: 'avalanche' },
     { name: "tron", id: 1230, networkName: 'tron' },
 
 
   ];
+  let mainAccount = ''
 
-  const getaccount = async () => {
+  async function tronConnect() {
 
-    // let acc = await loadWeb3();
-    if (acc == "No Wallet") {
-      toast.error('please install metamask')
-    }
-    else if (acc == "Wrong Network") {
-      toast.error('Wrong Network')
-    } else {
+    try {
+      mainAccount = await window?.tronWeb?.defaultAddress?.base58
+
       setGetAccount(true)
-      let myAcc = acc?.substring(0, 4) + "..." + acc?.substring(acc?.length - 4);
+      let myAcc = mainAccount?.substring(0, 4) + "..." + mainAccount?.substring(mainAccount?.length - 4);
       setshowwalleticon(false)
       setBtTxt(myAcc);
+      // console.log('main Account', mainAccount)
 
+      if (mainAccount) {
+        settronAddress(mainAccount)
+        setaccount(mainAccount)
+      } else {
+        const HttpProvider = TronWeb.providers.HttpProvider
+        const fullNode = new HttpProvider('https://api.shasta.trongrid.io')
+        const solidityNode = new HttpProvider('https://api.shasta.trongrid.io')
+        const eventServer = 'https://api.shasta.trongrid.io/'
+        const gettronWeb = new TronWeb(fullNode, solidityNode, eventServer)
+
+
+        toast.warning('Please login or install tron wallet!')
+      }
+    } catch (error) {
+      toast.error(error.message)
+
+      console.log('errorrrrr', error.message)
     }
+  }
+
+  const getaccount = async () => {
+    let id = localStorage.getItem("NETWORKID");
+    if (id == 1230) {
+      tronConnect()
+    }
+    else {
+      if (acc == "No Wallet") {
+        toast.error('please install metamask')
+      }
+      else if (acc == "Wrong Network") {
+        toast.error('Wrong Network')
+      } else {
+        setGetAccount(true)
+        let myAcc = acc?.substring(0, 4) + "..." + acc?.substring(acc?.length - 4);
+        setshowwalleticon(false)
+        setBtTxt(myAcc);
+
+      }
+    }
+
 
 
   }
   const handleChange = async (value) => {
+
     setChain(value)
     localStorage.setItem("NETWORKID", (value.id));
-
     let res = await loadWeb3(value.id);
     console.log("LoadWeb3", res);
-    // toast(res)
     setAcc(res)
     setAddress(res)
 
@@ -70,7 +110,6 @@ function Token_header({ setAddress }) {
     const init = async () => {
       let id = localStorage.getItem("NETWORKID");
 
-      console.log('what is first result', id)
       let res = await loadWeb3(id);
       setAcc(res)
       setAddress(res)
@@ -104,6 +143,8 @@ function Token_header({ setAddress }) {
                 );
               })}
             </select>
+            {/* <button className='btn btn-primary mx-2' onClick={tronConnect}>connect tron</button> */}
+
             <button className='connect_btn'>{btnTxt}</button>
           </div>
         </div>

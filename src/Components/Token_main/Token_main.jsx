@@ -18,13 +18,16 @@ function Token_main({ address }) {
     const [tokenSymbol, setTokenSymbol] = useState('');
     const [totalSupply, setTotalSupply] = useState(0);
     const [decimals, setDecimals] = useState(0);
+    const [decimalsValue, setDecimalsValue] = useState(0);
+
     const [selectedItem, setSelectedItem] = useState("");
+
     const [emailAddress, setEmailAddress] = useState("");
     const [getToken, setgetToken] = useState([]);
     const [isLoading, setisLoading] = useState(false);
 
 
-
+    console.log('totalsupply', totalSupply + decimals)
 
     let [copied, setcopied] = useState(false)
 
@@ -56,9 +59,9 @@ function Token_main({ address }) {
     };
 
 
-    onCopy = () => {
-        setcopied(true);
-    };
+    // onCopy = () => {
+    //     setcopied(true);
+    // };
 
 
 
@@ -126,7 +129,7 @@ function Token_main({ address }) {
                         network_name: selectedItem,
                         tokenname: tokenName,
                         token_symbol: tokenSymbol,
-                        total_supply: totalSupply,
+                        total_supply: totalSupply + decimals,
                         decimals: decimals,
                         isMint: checkedOne.toString(),
                         isBurn: checkedTwo.toString(),
@@ -170,9 +173,7 @@ function Token_main({ address }) {
 
         } else {
             try {
-                console.log("address", address);
                 let res = await axios.get(`https://coin-creators.herokuapp.com/students?address=${address}`)
-                console.log("RES", res.data);
                 setgetToken(res.data)
 
             } catch (e) {
@@ -181,8 +182,27 @@ function Token_main({ address }) {
         }
     }
 
+    const handleDecimals = async (event) => {
+        let decimals = event.target.value
+        setDecimalsValue(decimals)
+        if (decimals == 18) {
+            setDecimals('000000000000000000');
 
+        }
+        else if (decimals == 10) {
+            setDecimals('0000000000');
 
+        }
+        else if (decimals == 8) {
+            setDecimals('00000000');
+
+        }
+        else if (decimals == 6) {
+            setDecimals('000000');
+
+        }
+
+    }
     useEffect(() => {
         get_Token_list()
         let id = setInterval(() => {
@@ -307,10 +327,9 @@ function Token_main({ address }) {
                             <option value="Ethereum">Ethereum</option>
                             <option value="Binance Smart Chain" >Binance Smart Chain</option>
                             <option value="Polygon">Matic(Polygon)</option>
-                            <option value="Fantom Opera">Fantom Opera</option>
-                            <option value="Cronos ">Cronos </option>
                             <option value="Avalanche">Avalanche </option>
-                            <option value="DogeChain">DogeChain </option>
+                            <option value="Tron">Tron </option>
+
                         </select>
                         <p className='input_para'>Choose your network</p>
 
@@ -350,7 +369,7 @@ function Token_main({ address }) {
                                     </div>
                                 </div>
                                 <div className="col-md-7"><div>
-                                    <input type="number" onChange={(e) => { setTotalSupply(e.target.value) }} className='token_input' placeholder='1000000000000' />
+                                    <input type="number" onChange={(e) => { setTotalSupply(e.target.value) }} className='token_input' />
                                     <p className='input_para'>
                                         Insert the initial number of tokens available. Will be put in your account..</p>
                                 </div>
@@ -362,9 +381,16 @@ function Token_main({ address }) {
                                         <h6 >Decimals</h6>
                                     </div>
                                 </div>
-                                <div className="col-md-7">
+                                <div className="col-md-5">
                                     <div>
-                                        <input type="number" onChange={(e) => { setDecimals(e.target.value) }} className='token_input' placeholder='18' />
+                                        <select className='network_select' value={decimalsValue} onChange={handleDecimals}>
+                                            <option value="Select Decimals">Select Decimals</option>
+
+                                            <option value="18">18</option>
+                                            <option value="10">10</option>
+                                            <option value="8">8</option>
+                                            <option value="6">6 </option>
+                                        </select>
                                         <p className='input_para'>
                                             Insert the decimal precision of your token.</p>
                                     </div>
@@ -378,7 +404,7 @@ function Token_main({ address }) {
                                 </div>
                                 <div className="col-md-7"><div>
                                     <form>
-                                        <input type="email" onChange={(e) => { setEmailAddress(e.target.value) }} className='token_input' placeholder='email' />
+                                        <input type="email" onChange={(e) => { setEmailAddress(e.target.value) }} className='token_input' />
 
 
                                     </form>
