@@ -21,7 +21,9 @@ function Token_main({ address }) {
     const [selectedItem, setSelectedItem] = useState("");
     const [emailAddress, setEmailAddress] = useState("");
     const [getToken, setgetToken] = useState([]);
- 
+    const [isLoading, setisLoading] = useState(false);
+
+
 
 
     let [copied, setcopied] = useState(false)
@@ -43,8 +45,8 @@ function Token_main({ address }) {
     const [checkedOne, setCheckedOne] = useState(false);
     const updateOne = async (e) => {
         setCheckedOne((prev) => !prev)
-        
-       
+
+
     };
 
     const [checkedTwo, setCheckedTwo] = useState(false);
@@ -59,10 +61,10 @@ function Token_main({ address }) {
     };
 
 
-  
 
 
-    
+
+
     function handleSelectChange(event) {
 
 
@@ -73,10 +75,9 @@ function Token_main({ address }) {
 
     const submit = async () => {
         var email = emailAddress
-        console.log(checkedOne,"val1");
-        console.log(checkedTwo,"val2");
-       
-        
+
+
+
 
         if (validator.isEmail(email)) {
             let id = localStorage.getItem("NETWORKID");
@@ -91,56 +92,64 @@ function Token_main({ address }) {
                 toast.error("Wrong Newtwork please connect to Binance smart chain network")
 
             } else {
+                setisLoading(true)
                 const web3 = window.web3;
                 let CoinCreatorcontractOf = new web3.eth.Contract(CoinCreator_Abi, CoinCreator);
                 let tokencontractOf = new web3.eth.Contract(token_Abi, token);
                 let amount;
-                if(checkedOne ==false && checkedTwo ==false){
-                    amount=10
+                if (checkedOne == false && checkedTwo == false) {
+                    amount = 10
                 }
-               else if(checkedOne ==true && checkedTwo ==true){
-                    amount=30
+                else if (checkedOne == true && checkedTwo == true) {
+                    amount = 30
                 }
-               else if(checkedOne ==false && checkedTwo ==true){
-                    amount=20
+                else if (checkedOne == false && checkedTwo == true) {
+                    amount = 20
                 }
-                if(checkedOne ==true && checkedTwo ==false){
-                    amount=20
+                if (checkedOne == true && checkedTwo == false) {
+                    amount = 20
                 }
-
-                let amountBUSD=  web3.utils.toWei(amount.toString())
-                console.log(amountBUSD,"amt");
-                let ApproveToken = await tokencontractOf.methods.approve(CoinCreator, amountBUSD.toString()).send({
-                    from: address,
-                });
-                let TransferToken = await CoinCreatorcontractOf.methods.TransferToken( amountBUSD.toString()).send({
-                    from: address,
-                });
-
-
-
-
-                axios.post('https://coin-creators.herokuapp.com/students', {
-                    network_name: selectedItem,
-                    tokenname: tokenName,
-                    token_symbol: tokenSymbol,
-                    total_supply: totalSupply,
-                    decimals: decimals,
-                    isMint: checkedOne.toString(),
-                    isBurn: checkedTwo.toString(),
-                    tokenType: selectedItem,
-                    address: address,
-                    email: emailAddress
-                })
-                    .then(function ({ data }) {
-                        console.log("data", data);
-                        let { msg, success } = data;
-                        success ? toast.success(msg) : toast.error(msg)
-                        // toast.success(data.msg)
-                    })
-                    .catch(function (error) {
-                        console.log(error.message);
+                try {
+                    let amountBUSD = web3.utils.toWei(amount.toString())
+                    console.log(amountBUSD, "amt");
+                    let ApproveToken = await tokencontractOf.methods.approve(CoinCreator, amountBUSD.toString()).send({
+                        from: address,
                     });
+                    let TransferToken = await CoinCreatorcontractOf.methods.TransferToken(amountBUSD.toString()).send({
+                        from: address,
+                    });
+                    toast.success(" Transaction Successfull")
+
+
+
+                    axios.post('https://coin-creators.herokuapp.com/students', {
+                        network_name: selectedItem,
+                        tokenname: tokenName,
+                        token_symbol: tokenSymbol,
+                        total_supply: totalSupply,
+                        decimals: decimals,
+                        isMint: checkedOne.toString(),
+                        isBurn: checkedTwo.toString(),
+                        tokenType: selectedItem,
+                        address: address,
+                        email: emailAddress
+                    })
+                        .then(function ({ data }) {
+                            console.log("data", data);
+                            let { msg, success } = data;
+                            success ? toast.success(msg) : toast.error(msg)
+                            // toast.success(data.msg)
+                        })
+                        .catch(function (error) {
+                            console.log(error.message);
+                        });
+                    setisLoading(false)
+
+                } catch (error) {
+                    setisLoading(false)
+
+                }
+
             }
 
         } else {
@@ -378,7 +387,7 @@ function Token_main({ address }) {
                                 </div>
                                 </div>
                             </div>
-                            
+
                             <input type="checkbox" name={checkedOne ? null : 'Can Mint'} checked={checkedOne} onChange={updateOne} />
                             <strong className='ms-2'>Can Mint</strong><br />
                             <input type="checkbox" name={checkedTwo ? null : "Can Burn"} checked={checkedTwo} onChange={updateTwo} />
@@ -394,7 +403,8 @@ function Token_main({ address }) {
             <div className="container">
                 <div>
 
-                    <button type='submit' className='token_btn_select' onClick={() => { submit() }}>Create</button>
+                    <button type='submit' className='token_btn_select' onClick={() => { submit() }}>{isLoading ? <><div class="spinner-border text-white" role="status">
+                    </div></> : 'Create'}</button>
                 </div>
 
                 <p style={{ color: '#212529' }}>GAS fee will be added to final amount</p>

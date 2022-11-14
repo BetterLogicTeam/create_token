@@ -8,19 +8,22 @@ import Moon_token from '../Moon_token/Moon_token'
 import MoonFaq from '../MoonFaq/MoonFaq'
 import Moon_u_footer from '../Moon__upper_footer/Moon_u_footer'
 import Moon_choose from '../Moon_choose/Moon_choose'
+import Moon_footer from '../Moon_footer/Moon_footer'
 
 function Moon_main() {
   return (
     <div>
-        <Moon_header/>
-        <Moon_token/>
-        <Moon_choose/>
-        <Moon_features/>
-   
-      <MoonFaq/>
-      <Moon_u_footer/>
+      <Moon_header />
+      <Moon_token />
+      <Moon_choose />
+      <Moon_features />
 
-      
+      <MoonFaq />
+      <Moon_u_footer />
+      <Moon_footer />
+
+
+
     </div>
   )
 }

@@ -11,7 +11,7 @@ import { loadWeb3 } from '../../apis/api'
 
 function Token_page({ setAddress }) {
   const [isNotUser, setINotUser] = useState();
-const [address, setAddres] = useState('');
+  const [address, setAddres] = useState('');
 
   const myfun = async () => {
     let id = localStorage.getItem("NETWORKID");

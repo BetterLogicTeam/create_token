@@ -98,7 +98,7 @@ function AdminPanel({ address }) {
         }
     }, []);
     console.log('urllenght', url.length)
-    return (<>
+    return (<div className=''>
         <h2 className='' style={{ color: "#5b53a2" }}> Welcome to Admin Panel</h2>
         <Tabs
             id="controlled-tab-example"
@@ -382,7 +382,7 @@ function AdminPanel({ address }) {
 
 
         </Tabs>
-    </>
+    </div>
 
     );
 }

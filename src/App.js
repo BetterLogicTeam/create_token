@@ -12,16 +12,14 @@ function App() {
   const [address, setAddress] = useState('');
   return (
     <div className="App">
-      <Router>
-        <ToastContainer />
 
-        <Routes>
-          <Route exact path="/" element={<Moon_main />} />
-          <Route exact path="/token" element={<Token_page address={address} setAddress={setAddress} />} />
-        </Routes>
-        <Moon_footer />
+      <ToastContainer />
 
-      </Router>
+      <Routes>
+        <Route exact path="/" element={<Moon_main />} />
+        <Route exact path="/token" element={<Token_page address={address} setAddress={setAddress} />} />
+      </Routes>
+
 
 
 
