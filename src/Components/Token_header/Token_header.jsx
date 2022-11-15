@@ -25,7 +25,7 @@ function Token_header({ setAddress }) {
 
   let [showwalleticon, setshowwalleticon] = useState(true)
   const [chain, setChain] = useState({
-    name: "Hong Kong",
+    name: "ethereum",
 
     id: 1,
   });
@@ -91,15 +91,13 @@ function Token_header({ setAddress }) {
       }
     }
 
-
-
   }
   const handleChange = async (value) => {
 
     setChain(value)
     localStorage.setItem("NETWORKID", (value.id));
     let res = await loadWeb3(value.id);
-    console.log("LoadWeb3", res);
+    // console.log("LoadWeb3", res);
     setAcc(res)
     setAddress(res)
 
@@ -109,7 +107,6 @@ function Token_header({ setAddress }) {
 
     const init = async () => {
       let id = localStorage.getItem("NETWORKID");
-
       let res = await loadWeb3(id);
       setAcc(res)
       setAddress(res)

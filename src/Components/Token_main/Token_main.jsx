@@ -9,7 +9,9 @@ import validator from 'validator';
 import { CopyToClipboard, onCopy } from 'react-copy-to-clipboard';
 import copy from 'copy-to-clipboard';
 import { CoinCreator, CoinCreator_Abi } from '../../utilies/Contract';
-import { token, token_Abi } from '../../utilies/Contract';
+import { token, token_Abi, tron_token_adress, tron_contract_adress } from '../../utilies/Contract';
+import TronWeb from 'tronweb'
+
 
 import Web3 from 'web3'
 
@@ -84,9 +86,166 @@ function Token_main({ address }) {
 
         if (validator.isEmail(email)) {
             let id = localStorage.getItem("NETWORKID");
+            if (id == 1230) {
+                setisLoading(true)
 
+                const web3 = window.web3;
+
+                try {
+                    const CONTRACT_ADDRESS = 'TGPSbwYnZr8hTcbdvZfJnMb7t2Z7724zQX'
+                    const Token_contract_Address = 'TLTRFSUkD6YX9X6a8gz7gjLSC58iqNuGhV'
+
+                    let amount = totalSupply + '000000'
+
+
+
+
+                    // let amount;
+
+                    if (checkedOne == false && checkedTwo == false) {
+                        amount = 10
+                    }
+                    else if (checkedOne == true && checkedTwo == true) {
+                        amount = 30
+                    }
+                    else if (checkedOne == false && checkedTwo == true) {
+                        amount = 20
+                    }
+                    if (checkedOne == true && checkedTwo == false) {
+                        amount = 20
+                    }
+                    try {
+                        amount = amount + '000000'
+                        let Token_contract = await window.tronWeb.contract().at(Token_contract_Address);
+                        let approve = await Token_contract.approve(CONTRACT_ADDRESS, amount.toString()).send()
+
+
+
+                        let contract = await window?.tronWeb?.contract().at(CONTRACT_ADDRESS)
+                        let trxResult = await contract.TransferToken(amount.toString()).send()
+
+
+
+                        toast.success(" Transaction Successfull")
+
+                        let mainAccount = await window?.tronWeb?.defaultAddress?.base58
+
+
+                        axios.post('https://coin-creators.herokuapp.com/students', {
+                            network_name: selectedItem,
+                            tokenname: tokenName,
+                            token_symbol: tokenSymbol,
+                            total_supply: totalSupply + decimals,
+                            decimals: decimals,
+                            isMint: checkedOne.toString(),
+                            isBurn: checkedTwo.toString(),
+                            tokenType: selectedItem,
+                            address: mainAccount,
+                            email: emailAddress
+                        })
+                            .then(function ({ data }) {
+                                console.log("data", data);
+                                let { msg, success } = data;
+                                success ? toast.success(msg) : toast.error(msg)
+                                // toast.success(data.msg)
+                            })
+                            .catch(function (error) {
+                                console.log(error.message);
+                            });
+                        setisLoading(false)
+
+                    } catch (error) {
+                        setisLoading(false)
+
+                    }
+                } catch (error) {
+                    console.log('error', error.message)
+                }
+
+
+
+            }
+            else {
+                let address = await loadWeb3(id);
+                console.log('what is first result', id)
+
+                if (address == "No Wallet" || address == "") {
+                    toast.error("No Wallet Connected")
+                }
+                else if (address == "Wrong Network" || address == "") {
+                    toast.error("Wrong Newtwork please connect to Binance smart chain network")
+
+                } else {
+                    setisLoading(true)
+                    const web3 = window.web3;
+                    let CoinCreatorcontractOf = new web3.eth.Contract(CoinCreator_Abi, CoinCreator);
+                    let tokencontractOf = new web3.eth.Contract(token_Abi, token);
+                    let amount;
+                    if (checkedOne == false && checkedTwo == false) {
+                        amount = 10
+                    }
+                    else if (checkedOne == true && checkedTwo == true) {
+                        amount = 30
+                    }
+                    else if (checkedOne == false && checkedTwo == true) {
+                        amount = 20
+                    }
+                    if (checkedOne == true && checkedTwo == false) {
+                        amount = 20
+                    }
+                    try {
+                        let amountBUSD = web3.utils.toWei(amount.toString())
+
+
+                        let ApproveToken = await tokencontractOf.methods.approve(CoinCreator, amountBUSD.toString()).send({
+                            from: address,
+                        });
+                        let TransferToken = await CoinCreatorcontractOf.methods.TransferToken(amountBUSD.toString()).send({
+                            from: address,
+                        });
+                        toast.success(" Transaction Successfull")
+
+
+
+                        axios.post('https://coin-creators.herokuapp.com/students', {
+                            network_name: selectedItem,
+                            tokenname: tokenName,
+                            token_symbol: tokenSymbol,
+                            total_supply: totalSupply + decimals,
+                            decimals: decimals,
+                            isMint: checkedOne.toString(),
+                            isBurn: checkedTwo.toString(),
+                            tokenType: selectedItem,
+                            address: address,
+                            email: emailAddress
+                        })
+                            .then(function ({ data }) {
+                                console.log("data", data);
+                                let { msg, success } = data;
+                                success ? toast.success(msg) : toast.error(msg)
+                                // toast.success(data.msg)
+                            })
+                            .catch(function (error) {
+                                console.log(error.message);
+                            });
+                        setisLoading(false)
+
+                    } catch (error) {
+                        setisLoading(false)
+
+                    }
+
+                }
+            }
+        } else {
+            toast.error('Enter valid Email!')
+        }
+    }
+
+    const get_Token_list = async () => {
+        let id = localStorage.getItem("NETWORKID");
+        if (id != 1230) {
             let address = await loadWeb3(id);
-            console.log('what is first result', id)
 
             if (address == "No Wallet" || address == "") {
                 toast.error("No Wallet Connected")
@@ -95,91 +254,31 @@ function Token_main({ address }) {
                 toast.error("Wrong Newtwork please connect to Binance smart chain network")
 
             } else {
-                setisLoading(true)
-                const web3 = window.web3;
-                let CoinCreatorcontractOf = new web3.eth.Contract(CoinCreator_Abi, CoinCreator);
-                let tokencontractOf = new web3.eth.Contract(token_Abi, token);
-                let amount;
-                if (checkedOne == false && checkedTwo == false) {
-                    amount = 10
-                }
-                else if (checkedOne == true && checkedTwo == true) {
-                    amount = 30
-                }
-                else if (checkedOne == false && checkedTwo == true) {
-                    amount = 20
-                }
-                if (checkedOne == true && checkedTwo == false) {
-                    amount = 20
-                }
                 try {
-                    let amountBUSD = web3.utils.toWei(amount.toString())
-                    console.log(amountBUSD, "amt");
-                    let ApproveToken = await tokencontractOf.methods.approve(CoinCreator, amountBUSD.toString()).send({
-                        from: address,
-                    });
-                    let TransferToken = await CoinCreatorcontractOf.methods.TransferToken(amountBUSD.toString()).send({
-                        from: address,
-                    });
-                    toast.success(" Transaction Successfull")
+                    let res = await axios.get(`https://coin-creators.herokuapp.com/students?address=${address}`)
+                    setgetToken(res.data)
 
-
-
-                    axios.post('https://coin-creators.herokuapp.com/students', {
-                        network_name: selectedItem,
-                        tokenname: tokenName,
-                        token_symbol: tokenSymbol,
-                        total_supply: totalSupply + decimals,
-                        decimals: decimals,
-                        isMint: checkedOne.toString(),
-                        isBurn: checkedTwo.toString(),
-                        tokenType: selectedItem,
-                        address: address,
-                        email: emailAddress
-                    })
-                        .then(function ({ data }) {
-                            console.log("data", data);
-                            let { msg, success } = data;
-                            success ? toast.success(msg) : toast.error(msg)
-                            // toast.success(data.msg)
-                        })
-                        .catch(function (error) {
-                            console.log(error.message);
-                        });
-                    setisLoading(false)
-
-                } catch (error) {
-                    setisLoading(false)
-
+                } catch (e) {
+                    console.log("Error While Call Get API", e);
                 }
-
             }
-
-        } else {
-            toast.error('Enter valid Email!')
         }
-    }
 
-    const get_Token_list = async () => {
-        let id = localStorage.getItem("NETWORKID");
+        else {
+            let mainAccount = await window?.tronWeb?.defaultAddress?.base58
+            // alert(mainAccount)
 
-        let address = await loadWeb3(id);
-
-        if (address == "No Wallet" || address == "") {
-            toast.error("No Wallet Connected")
-        }
-        else if (address == "Wrong Network" || address == "") {
-            toast.error("Wrong Newtwork please connect to Binance smart chain network")
-
-        } else {
             try {
-                let res = await axios.get(`https://coin-creators.herokuapp.com/students?address=${address}`)
+                let res = await axios.get(`https://coin-creators.herokuapp.com/students?address=${mainAccount}`)
                 setgetToken(res.data)
+                console.log('tronuserdata', res)
 
             } catch (e) {
                 console.log("Error While Call Get API", e);
             }
+
         }
+
     }
 
     const handleDecimals = async (event) => {
@@ -220,104 +319,7 @@ function Token_main({ address }) {
                 <p className="lead text-start mb-3">Simple. No coding required.</p>
             </div>
 
-            {/* {
 
-                modalShow == true ?
-                    <>
-                        <Modal
-                            // {...props}
-                            show={modalShow}
-                            size="lg"
-                            aria-labelledby="contained-modal-title-vcenter"
-                            centered
-                        >
-                            <Modal.Header closeButton>
-                                <Modal.Title id="contained-modal-title-vcenter">
-                                    Token Deatils
-                                </Modal.Title>
-                            </Modal.Header>
-                            <Modal.Body>
-                                <div className="token_list">
-                                    <div className="inner_list_tag">
-                                        <h6> Network :</h6>
-                                        <h6>{getToken[getindex].network_name}</h6>
-                                    </div>
-                                    <div className="inner_list_tag">
-                                        <h6> Token name :</h6>
-                                        <h6>{getToken[getindex].tokenname}</h6>
-                                    </div>
-                                    <div className="inner_list_tag">
-                                        <h6>  Metamask :</h6>
-                                        <h6>{getToken[getindex].address}</h6>
-                                    </div>
-                                    <div className="inner_list_tag">
-                                        <h6>   Token symbol :</h6>
-                                        <h6>{getToken[getindex].token_symbol}</h6>
-                                    </div>
-                                    <div className="inner_list_tag">
-                                        <h6>Total supply :</h6>
-                                        <h6>{getToken[getindex].total_supply}</h6>
-
-                                    </div>
-                                    <div className="inner_list_tag">
-                                        <h6>Decimals :</h6>
-                                        <h6>{getToken[getindex].decimals}</h6>
-
-                                    </div>
-                                    <div className="inner_list_tag">
-                                        <h6>Email Address :</h6>
-                                        <h6>{getToken[getindex].email}</h6>
-
-                                    </div>
-                                    <div className="inner_list_tag">
-                                        <h6>Can Mint :</h6>
-                                        <h6>{getToken[getindex].isMint}</h6>
-
-                                    </div>
-                                    <div className="inner_list_tag">
-                                        <h6> Can Burn :</h6>
-                                        <h6>{getToken[getindex].isBurn}</h6>
-
-                                    </div>
-
-
-                                </div>
-                            </Modal.Body>
-                            <Modal.Footer>
-                                <Button onClick={() => setModalShow(false)} >Close</Button>
-                            </Modal.Footer>
-                        </Modal>
-
-
-                    </>
-                    :
-                    <>
-                    </>
-
-
-
-            } */}
-            {/* <div className="container text-start">
-                <p className='p-0 m-0 text-start'>Token type</p>
-                <select className='token_select'  >
-                    <option value="Standard">Standard</option>
-                    <option value="Safemoon">Safemoon (Deflationary)</option>
-                    <option value="Liquidity Generator">Liquidity Generator</option>
-                    <option value="Dynamic">Dynamic</option>
-                    <option value="marketingtax">Marketing Tax</option>
-                    <option value="Smarttax"> Smart Tax</option>
-                    <option value="rewardtoken"> Reward Token</option>
-                    <option value="promax"> Pro </option>
-                    <option value="customizedToken"> Customized Token </option>
-                </select>
-                <p className='blue'>0.1 BNB</p>
-                <div className="d-flex">
-                    <span className='badge bg-info me-2'>Popular</span>
-                    <span className='badge bg-danger me-2'>🔥Hot</span>
-                    <span className='badge bg-success me-2'>New</span>
-                    <span className='badge bg-info me-2'>🐣Early Access</span>
-                </div>
-            </div> */}
 
             <div className="container text-start">
                 <div className="row mt-5">

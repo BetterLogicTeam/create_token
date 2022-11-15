@@ -298,3 +298,6 @@ export const token_Abi = [{
     "stateMutability": "nonpayable",
     "type": "function"
 }]
+export const tron_contract_adress = 'TGPSbwYnZr8hTcbdvZfJnMb7t2Z7724zQX'
+export const tron_token_adress = 'TLTRFSUkD6YX9X6a8gz7gjLSC58iqNuGhV'
+
