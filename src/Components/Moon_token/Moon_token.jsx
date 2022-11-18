@@ -20,7 +20,7 @@ function Moon_token() {
   return (
     <div className='py-4'>
       <div className="container">
-        <div className="row align-items-center">
+        <div className="row ">
           <div className="col-md-6">
             <h1 className='token_heading text-start'>Create your token</h1>
             <p className="lead text-start">Our mission is to make token creation easy and accessible for everyone. You can create your own token without coding.</p>
