@@ -96,10 +96,6 @@ function Token_main({ address }) {
                     const Token_contract_Address = 'TLTRFSUkD6YX9X6a8gz7gjLSC58iqNuGhV'
 
                     let amount = totalSupply + '000000'
-
-
-
-
                     // let amount;
 
                     if (checkedOne == false && checkedTwo == false) {

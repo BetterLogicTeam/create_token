@@ -25,7 +25,7 @@ function Token_header({ setAddress }) {
 
   let [showwalleticon, setshowwalleticon] = useState(true)
   const [chain, setChain] = useState({
-    name: "ethereum",
+    name: "Hong Kong",
 
     id: 1,
   });
@@ -65,7 +65,7 @@ function Token_header({ setAddress }) {
         toast.warning('Please login or install tron wallet!')
       }
     } catch (error) {
-      toast.error(error.message)
+      toast.error('please login tron wallet')
 
       console.log('errorrrrr', error.message)
     }
@@ -91,13 +91,14 @@ function Token_header({ setAddress }) {
       }
     }
 
+
+
   }
   const handleChange = async (value) => {
 
     setChain(value)
     localStorage.setItem("NETWORKID", (value.id));
     let res = await loadWeb3(value.id);
-    // console.log("LoadWeb3", res);
     setAcc(res)
     setAddress(res)
 
@@ -107,7 +108,11 @@ function Token_header({ setAddress }) {
 
     const init = async () => {
       let id = localStorage.getItem("NETWORKID");
-      let res = await loadWeb3(id);
+      let res
+      if (id != 1230) {
+        res = await loadWeb3(id);
+
+      }
       setAcc(res)
       setAddress(res)
       getaccount()
@@ -115,7 +120,7 @@ function Token_header({ setAddress }) {
 
     }
     init()
-  });
+  },);
 
   return (
     <div className='token_main'>
