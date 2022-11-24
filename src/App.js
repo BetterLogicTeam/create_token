@@ -10,6 +10,7 @@ import { useState } from 'react';
 
 function App() {
   const [address, setAddress] = useState('');
+
   return (
     <div className="App">
 
@@ -17,7 +18,7 @@ function App() {
 
       <Routes>
         <Route exact path="/" element={<Moon_main />} />
-        <Route exact path="/token" element={<Token_page address={address} setAddress={setAddress} />} />
+        <Route exact path="/token" element={<Token_page address={address} setAddress={setAddress}  />} />
       </Routes>
 
 

@@ -6,12 +6,12 @@ import Token_steps from '../Token_steps/Token_steps';
 
 import Token_ut from '../Token_ut/Token_ut';
 
-function UserPanel({ address }) {
+function UserPanel({ address,chainName }) {
     const [key, setKey] = useState('Pending');
 
     return (
         <>
-            <Token_main address={address} />
+            <Token_main address={address} chainName={chainName} />
             <Token_steps />
             <Token_ut /></>
 

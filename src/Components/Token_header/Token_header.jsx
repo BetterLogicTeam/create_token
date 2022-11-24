@@ -11,7 +11,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import { loadWeb4 } from '../../apis/api2'
 import TronWeb from 'tronweb'
 
-function Token_header({ setAddress }) {
+function Token_header({ setAddress, setchainName }) {
   const [show, setShow] = useState(false);
   const [getAccount, setGetAccount] = useState(false);
   const [acc, setAcc] = useState('');
@@ -30,13 +30,11 @@ function Token_header({ setAddress }) {
     id: 1,
   });
   const selectOptions = [
-    { name: "binance", id: 56, networkName: 'binance' },
+    { name: "binance", id: 97, networkName: 'binance' },
     { name: "ethereum", id: 1, networkName: 'ethereum' },
     { name: "polygon", id: 80001, networkName: 'MumbaiTestNet' },
     { name: "avalanche", id: 43114, networkName: 'avalanche' },
     { name: "tron", id: 1230, networkName: 'tron' },
-
-
   ];
   let mainAccount = ''
 
@@ -60,8 +58,6 @@ function Token_header({ setAddress }) {
         const solidityNode = new HttpProvider('https://api.shasta.trongrid.io')
         const eventServer = 'https://api.shasta.trongrid.io/'
         const gettronWeb = new TronWeb(fullNode, solidityNode, eventServer)
-
-
         toast.warning('Please login or install tron wallet!')
       }
     } catch (error) {
@@ -86,7 +82,13 @@ function Token_header({ setAddress }) {
         setGetAccount(true)
         let myAcc = acc?.substring(0, 4) + "..." + acc?.substring(acc?.length - 4);
         setshowwalleticon(false)
-        setBtTxt(myAcc);
+        if (myAcc.length > 10) {
+          setBtTxt(myAcc);
+
+        }
+        else {
+          toast.error('please select network')
+        }
 
       }
     }
@@ -95,32 +97,36 @@ function Token_header({ setAddress }) {
 
   }
   const handleChange = async (value) => {
-
+    // console.log('handleChange', value)
+    setchainName(value.name)
     setChain(value)
+
+    setBtTxt('Connect')
+
     localStorage.setItem("NETWORKID", (value.id));
     let res = await loadWeb3(value.id);
     setAcc(res)
     setAddress(res)
 
   }
-  useEffect(() => {
+  // useEffect(() => {
 
 
-    const init = async () => {
-      let id = localStorage.getItem("NETWORKID");
-      let res
-      if (id != 1230) {
-        res = await loadWeb3(id);
+  //   const init = async () => {
+  //     let id = localStorage.getItem("NETWORKID");
+  //     let res
+  //     if (id != 1230) {
+  //       res = await loadWeb3(id);
 
-      }
-      setAcc(res)
-      setAddress(res)
-      getaccount()
+  //     }
+  //     setAcc(res)
+  //     setAddress(res)
+  //     getaccount()
 
 
-    }
-    init()
-  },);
+  //   }
+  //   init()
+  // },);
 
   return (
     <div className='token_main'>
@@ -147,7 +153,7 @@ function Token_header({ setAddress }) {
             </select>
             {/* <button className='btn btn-primary mx-2' onClick={tronConnect}>connect tron</button> */}
 
-            <button className='connect_btn'>{btnTxt}</button>
+            <button className='connect_btn' onClick={getaccount}>{btnTxt}</button>
           </div>
         </div>
 

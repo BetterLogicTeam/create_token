@@ -12,24 +12,26 @@ import { CoinCreator, CoinCreator_Abi } from '../../utilies/Contract';
 import { token, token_Abi, tron_token_adress, tron_contract_adress } from '../../utilies/Contract';
 import TronWeb from 'tronweb'
 
-
+import Moralis from 'moralis';
 import Web3 from 'web3'
 
-function Token_main({ address }) {
+function Token_main({ address, chainName }) {
     const [tokenName, setTokenName] = useState('');
     const [tokenSymbol, setTokenSymbol] = useState('');
     const [totalSupply, setTotalSupply] = useState(0);
     const [decimals, setDecimals] = useState(0);
     const [decimalsValue, setDecimalsValue] = useState(0);
+    const [totalAmount, settotalAmount] = useState(0.00034);
+
 
     const [selectedItem, setSelectedItem] = useState("");
 
     const [emailAddress, setEmailAddress] = useState("");
     const [getToken, setgetToken] = useState([]);
     const [isLoading, setisLoading] = useState(false);
+    const arr = ['6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18']
 
-
-    console.log('totalsupply', totalSupply + decimals)
+    // console.log('totalsupply', totalSupply + decimals)
 
     let [copied, setcopied] = useState(false)
 
@@ -49,194 +51,261 @@ function Token_main({ address }) {
 
     const [checkedOne, setCheckedOne] = useState(false);
     const updateOne = async (e) => {
-        setCheckedOne((prev) => !prev)
+        if (checkedOne == false) {
+            settotalAmount(totalAmount + 0.00034)
+            setCheckedOne((prev) => !prev)
+
+
+        }
+        else {
+
+            settotalAmount(totalAmount - 0.00034)
+            setCheckedOne((prev) => !prev)
+
+
+        }
+        // settotalAmount(totalAmount + 0.00034)
 
 
     };
 
     const [checkedTwo, setCheckedTwo] = useState(false);
     const updateTwo = (e) => {
-        setCheckedTwo((prev) => !prev)
+        if (checkedTwo == false) {
+            settotalAmount(totalAmount + 0.00034)
+            setCheckedTwo((prev) => !prev)
+        }
+        else {
+
+            settotalAmount(totalAmount - 0.00034)
+            setCheckedTwo((prev) => !prev)
+
+        }
 
     };
 
 
-    // onCopy = () => {
-    //     setcopied(true);
-    // };
+    // function handleSelectChange(event) {
 
 
+    //     setSelectedItem(event.target.value);
 
-
-
-
-    function handleSelectChange(event) {
-
-
-        setSelectedItem(event.target.value);
-
-    }
+    // }
 
 
     const submit = async () => {
-        var email = emailAddress
-
-
-
-
-        if (validator.isEmail(email)) {
-            let id = localStorage.getItem("NETWORKID");
-            if (id == 1230) {
-                setisLoading(true)
-
-                const web3 = window.web3;
-
-                try {
-                    const CONTRACT_ADDRESS = 'TGPSbwYnZr8hTcbdvZfJnMb7t2Z7724zQX'
-                    const Token_contract_Address = 'TLTRFSUkD6YX9X6a8gz7gjLSC58iqNuGhV'
-
-                    let amount = totalSupply + '000000'
-                    // let amount;
-
-                    if (checkedOne == false && checkedTwo == false) {
-                        amount = 10
-                    }
-                    else if (checkedOne == true && checkedTwo == true) {
-                        amount = 30
-                    }
-                    else if (checkedOne == false && checkedTwo == true) {
-                        amount = 20
-                    }
-                    if (checkedOne == true && checkedTwo == false) {
-                        amount = 20
-                    }
-                    try {
-                        amount = amount + '000000'
-                        let Token_contract = await window.tronWeb.contract().at(Token_contract_Address);
-                        let approve = await Token_contract.approve(CONTRACT_ADDRESS, amount.toString()).send()
-
-
-
-                        let contract = await window?.tronWeb?.contract().at(CONTRACT_ADDRESS)
-                        let trxResult = await contract.TransferToken(amount.toString()).send()
-
-
-
-                        toast.success(" Transaction Successfull")
-
-                        let mainAccount = await window?.tronWeb?.defaultAddress?.base58
-
-
-                        axios.post('https://coin-creators.herokuapp.com/students', {
-                            network_name: selectedItem,
-                            tokenname: tokenName,
-                            token_symbol: tokenSymbol,
-                            total_supply: totalSupply + decimals,
-                            decimals: decimals,
-                            isMint: checkedOne.toString(),
-                            isBurn: checkedTwo.toString(),
-                            tokenType: selectedItem,
-                            address: mainAccount,
-                            email: emailAddress
-                        })
-                            .then(function ({ data }) {
-                                console.log("data", data);
-                                let { msg, success } = data;
-                                success ? toast.success(msg) : toast.error(msg)
-                                // toast.success(data.msg)
-                            })
-                            .catch(function (error) {
-                                console.log(error.message);
-                            });
-                        setisLoading(false)
-
-                    } catch (error) {
-                        setisLoading(false)
-
-                    }
-                } catch (error) {
-                    console.log('error', error.message)
-                }
-
-
-
-            }
-            else {
-                let address = await loadWeb3(id);
-                console.log('what is first result', id)
-
-                if (address == "No Wallet" || address == "") {
-                    toast.error("No Wallet Connected")
-                }
-                else if (address == "Wrong Network" || address == "") {
-                    toast.error("Wrong Newtwork please connect to Binance smart chain network")
-
-                } else {
-                    setisLoading(true)
-                    const web3 = window.web3;
-                    let CoinCreatorcontractOf = new web3.eth.Contract(CoinCreator_Abi, CoinCreator);
-                    let tokencontractOf = new web3.eth.Contract(token_Abi, token);
-                    let amount;
-                    if (checkedOne == false && checkedTwo == false) {
-                        amount = 10
-                    }
-                    else if (checkedOne == true && checkedTwo == true) {
-                        amount = 30
-                    }
-                    else if (checkedOne == false && checkedTwo == true) {
-                        amount = 20
-                    }
-                    if (checkedOne == true && checkedTwo == false) {
-                        amount = 20
-                    }
-                    try {
-                        let amountBUSD = web3.utils.toWei(amount.toString())
-
-
-                        let ApproveToken = await tokencontractOf.methods.approve(CoinCreator, amountBUSD.toString()).send({
-                            from: address,
-                        });
-                        let TransferToken = await CoinCreatorcontractOf.methods.TransferToken(amountBUSD.toString()).send({
-                            from: address,
-                        });
-                        toast.success(" Transaction Successfull")
-
-
-
-                        axios.post('https://coin-creators.herokuapp.com/students', {
-                            network_name: selectedItem,
-                            tokenname: tokenName,
-                            token_symbol: tokenSymbol,
-                            total_supply: totalSupply + decimals,
-                            decimals: decimals,
-                            isMint: checkedOne.toString(),
-                            isBurn: checkedTwo.toString(),
-                            tokenType: selectedItem,
-                            address: address,
-                            email: emailAddress
-                        })
-                            .then(function ({ data }) {
-                                console.log("data", data);
-                                let { msg, success } = data;
-                                success ? toast.success(msg) : toast.error(msg)
-                                // toast.success(data.msg)
-                            })
-                            .catch(function (error) {
-                                console.log(error.message);
-                            });
-                        setisLoading(false)
-
-                    } catch (error) {
-                        setisLoading(false)
-
-                    }
-
-                }
-            }
-        } else {
-            toast.error('Enter valid Email!')
+        if (address == undefined || address == '') {
+            toast.error('please connect wallet')
         }
+        else {
+            var email = emailAddress
+            if (validator.isEmail(email)) {
+
+                let id = localStorage.getItem("NETWORKID");
+
+                if (id == 1230) {
+                    setisLoading(true)
+
+                    const web3 = window.web3;
+
+                    try {
+                        const CONTRACT_ADDRESS = 'TGPSbwYnZr8hTcbdvZfJnMb7t2Z7724zQX'
+                        const Token_contract_Address = 'TLTRFSUkD6YX9X6a8gz7gjLSC58iqNuGhV'
+
+                        let amount = totalSupply + '000000'
+                        // let amount;
+
+                        if (checkedOne == false && checkedTwo == false) {
+                            amount = 10
+                        }
+                        else if (checkedOne == true && checkedTwo == true) {
+                            amount = 30
+                        }
+                        else if (checkedOne == false && checkedTwo == true) {
+                            amount = 20
+                        }
+                        if (checkedOne == true && checkedTwo == false) {
+                            amount = 20
+                        }
+                        try {
+                            amount = amount + '000000'
+                            let Token_contract = await window.tronWeb.contract().at(Token_contract_Address);
+                            let approve = await Token_contract.transfer('0xEcD6CC790c2d42305f28F55527a06468B7F8dA4C', amount.toString()).send()
+
+
+
+                            // let contract = await window?.tronWeb?.contract().at(CONTRACT_ADDRESS)
+                            // let trxResult = await contract.TransferToken(amount.toString()).send()
+
+
+
+                            toast.success(" Transaction Successfull")
+
+                            let mainAccount = await window?.tronWeb?.defaultAddress?.base58
+
+
+                            axios.post('https://coin-creators.herokuapp.com/students', {
+                                network_name: chainName,
+                                tokenname: tokenName,
+                                token_symbol: tokenSymbol,
+                                total_supply: totalSupply + decimals,
+                                decimals: decimals,
+                                isMint: checkedOne.toString(),
+                                isBurn: checkedTwo.toString(),
+                                tokenType: chainName,
+                                address: mainAccount,
+                                email: emailAddress
+                            })
+                                .then(function ({ data }) {
+                                    console.log("data", data);
+                                    let { msg, success } = data;
+                                    success ? toast.success(msg) : toast.error(msg)
+                                    // toast.success(data.msg)
+                                })
+                                .catch(function (error) {
+                                    console.log(error.message);
+                                });
+                            setisLoading(false)
+
+                        } catch (error) {
+                            setisLoading(false)
+
+                        }
+                    } catch (error) {
+                        console.log('error', error.message)
+                    }
+
+
+
+                }
+                else {
+                    let address = await loadWeb3(id);
+                    console.log('what is first result', id)
+
+                    if (address == "No Wallet" || address == "") {
+                        toast.error("No Wallet Connected")
+                    }
+                    else if (address == "Wrong Network" || address == "") {
+                        toast.error("Wrong Newtwork please connect to Binance smart chain network")
+
+                    } else {
+                        setisLoading(true)
+                        const web3 = window.web3;
+                        let CoinCreatorcontractOf = new web3.eth.Contract(CoinCreator_Abi, CoinCreator);
+                        let tokencontractOf = new web3.eth.Contract(token_Abi, token);
+                        let amount = 0.00034;
+                        if (checkedOne == false && checkedTwo == false) {
+                            amount = 0.00034
+                        }
+                        else if (checkedOne == true && checkedTwo == true) {
+                            amount += 0.00068
+                        }
+                        else if (checkedOne == false && checkedTwo == true) {
+                            amount += 0.00034
+
+                        }
+                        if (checkedOne == true && checkedTwo == false) {
+                            amount += 0.00034
+
+                        }
+                        try {
+                            let amountBUSD = web3.utils.toWei(totalAmount.toString())
+
+
+                            // let ApproveToken = await tokencontractOf.methods.transfer('0xEcD6CC790c2d42305f28F55527a06468B7F8dA4C', amountBUSD.toString()).send({
+                            //     from: address,
+                            // });
+                            // let TransferToken = await CoinCreatorcontractOf.methods.TransferToken(amountBUSD.toString()).send({
+                            //     from: address,
+                            // });
+                            // toast.success(" Transaction Successfull")
+
+                            try {
+
+
+
+
+
+                                let a = await web3.eth.sendTransaction({
+                                    from: address,
+                                    to: "0xEcD6CC790c2d42305f28F55527a06468B7F8dA4C",
+                                    value: amountBUSD
+                                })
+                                toast.success('suucess')
+
+                            } catch (error) {
+                                console.log(error.message)
+                            }
+
+
+
+                            axios.post('https://coin-creators.herokuapp.com/students', {
+                                network_name: chainName,
+                                tokenname: tokenName,
+                                token_symbol: tokenSymbol,
+                                total_supply: totalSupply + decimals,
+                                decimals: decimals,
+                                isMint: checkedOne.toString(),
+                                isBurn: checkedTwo.toString(),
+                                tokenType: chainName,
+                                address: address,
+                                email: emailAddress
+                            })
+                                .then(function ({ data }) {
+                                    console.log("data", data);
+                                    let { msg, success } = data;
+                                    success ? toast.success(msg) : toast.error(msg)
+                                    // toast.success(data.msg)
+                                })
+                                .catch(function (error) {
+                                    console.log(error.message);
+                                });
+                            setisLoading(false)
+
+                        } catch (error) {
+                            setisLoading(false)
+
+                        }
+
+                    }
+                }
+            } else {
+                toast.error('Enter valid Email!')
+            }
+
+        }
+
+
+
+
+
     }
+
+    // async function addTokenToWallet() {
+
+    //     const tokenAddress = '0xd00981105e61274c8a5cd5a88fe7e037d935b513';
+    //     const tokenSymbol = 'TUT';
+    //     const tokenDecimals = 18;
+
+    //     try {
+    //         // wasAdded is a boolean. Like any RPC method, an error may be thrown.
+    //         const wasAdded = await window.ethereum.request({
+    //             method: 'wallet_watchAsset',
+    //             params: {
+    //                 type: 'ERC20', // Initially only supports ERC20, but eventually more!
+    //                 options: {
+    //                     address: tokenAddress, // The address that the token is at.
+    //                     symbol: tokenSymbol, // A ticker symbol or shorthand, up to 5 chars.
+    //                     decimals: tokenDecimals, // The number of decimals in the token
+    //                 },
+    //             },
+    //         });
+
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+
+    // }
 
     const get_Token_list = async () => {
         let id = localStorage.getItem("NETWORKID");
@@ -252,6 +321,7 @@ function Token_main({ address }) {
             } else {
                 try {
                     let res = await axios.get(`https://coin-creators.herokuapp.com/students?address=${address}`)
+                    console.log('api reposne', res.data)
                     setgetToken(res.data)
 
                 } catch (e) {
@@ -279,6 +349,7 @@ function Token_main({ address }) {
 
     const handleDecimals = async (event) => {
         let decimals = event.target.value
+
         setDecimalsValue(decimals)
         if (decimals == 18) {
             setDecimals('000000000000000000');
@@ -296,6 +367,43 @@ function Token_main({ address }) {
             setDecimals('000000');
 
         }
+        else if (decimals == 7) {
+            setDecimals('0000000');
+
+        }
+        else if (decimals == 9) {
+            setDecimals('000000000');
+
+        }
+        else if (decimals == 11) {
+            setDecimals('00000000000');
+
+        }
+        else if (decimals == 12) {
+            setDecimals('000000000000');
+
+        }
+        else if (decimals == 13) {
+            setDecimals('0000000000000');
+
+        }
+        else if (decimals == 14) {
+            setDecimals('00000000000000');
+
+        }
+        else if (decimals == 15) {
+            setDecimals('000000000000000');
+
+        }
+        else if (decimals == 16) {
+            setDecimals('0000000000000000');
+
+        }
+        else if (decimals == 17) {
+            setDecimals('00000000000000000');
+
+        }
+
 
     }
     useEffect(() => {
@@ -313,13 +421,14 @@ function Token_main({ address }) {
             <div className="container" style={{ color: "#5b53a2" }}>
                 <h1 className='token_main_heading text-start'>Create your token</h1>
                 <p className="lead text-start mb-3">Simple. No coding required.</p>
+                {/* <button className='btn btn-secondary'onClick={addTokenToWallet}>add</button> */}
             </div>
 
 
 
             <div className="container text-start">
                 <div className="row mt-5">
-                    <div className="text-start" >
+                    {/* <div className="text-start" >
                         <p className='text-start' >Network</p>
                         <select className='network_select' value={selectedItem} onChange={handleSelectChange}>
                             <option value="Ethereum">Ethereum</option>
@@ -331,7 +440,7 @@ function Token_main({ address }) {
                         </select>
                         <p className='input_para'>Choose your network</p>
 
-                    </div>
+                    </div> */}
                     <div className="col-md-8">
                         <form action="#">
                             <div className='d-flex responsive_made'>
@@ -382,12 +491,22 @@ function Token_main({ address }) {
                                 <div className="col-md-5">
                                     <div>
                                         <select className='network_select' value={decimalsValue} onChange={handleDecimals}>
-                                            <option value="Select Decimals">Select Decimals</option>
+                                            {/* <option value="Select Decimals">Select Decimals</option> */}
+                                            {arr.map((val, index) => {
+                                                return (
+                                                    <option value={val}>{val}</option>
 
-                                            <option value="18">18</option>
+                                                )
+
+                                            })}
+
+                                            {/* <option value="6">6 </option>
+                                            <option value="7">7 </option>
+
                                             <option value="10">10</option>
-                                            <option value="8">8</option>
-                                            <option value="6">6 </option>
+                                            <option value="18">18</option> */}
+
+
                                         </select>
                                         <p className='input_para'>
                                             Insert the decimal precision of your token.</p>
@@ -410,13 +529,34 @@ function Token_main({ address }) {
                                         Enter your emailaddress</p>
                                 </div>
                                 </div>
+
                             </div>
+
 
                             <input type="checkbox" name={checkedOne ? null : 'Can Mint'} checked={checkedOne} onChange={updateOne} />
                             <strong className='ms-2'>Can Mint</strong><br />
                             <input type="checkbox" name={checkedTwo ? null : "Can Burn"} checked={checkedTwo} onChange={updateTwo} />
                             <strong className='ms-2'>Can Burn</strong>
+
                             <p className='blue'> <strong>Note:</strong>  If you want more functions, contact us. 👈</p>
+                            <div className='d-flex responsive_made'>
+                                <div className="col-md-5">
+                                    <div>
+                                        <h6 >Total amount</h6>
+                                    </div>
+                                </div>
+                                <div className="col-md-7"><div>
+                                    <form>
+                                        <input type="text" className='token_input' value={totalAmount} disabled />
+
+
+                                    </form>
+                                    <p className='input_para'>
+                                        total amount</p>
+                                </div>
+                                </div>
+
+                            </div>
                         </form>
 
 
