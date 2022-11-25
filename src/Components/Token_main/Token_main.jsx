@@ -282,31 +282,45 @@ function Token_main({ address, chainName }) {
 
     }
 
-    // async function addTokenToWallet() {
+    async function addTokenToWallet(url) {
+        console.log('urlurl', url)
+        const tokenAddress = '0xd00981105e61274c8a5cd5a88fe7e037d935b513';
+        const tokenSymbol = 'TUT';
+        const tokenDecimals = 18;
+        var position
+        var tokenAdress
+        let urladress = url.url
+        // alert(urladress)
 
-    //     const tokenAddress = '0xd00981105e61274c8a5cd5a88fe7e037d935b513';
-    //     const tokenSymbol = 'TUT';
-    //     const tokenDecimals = 18;
+        if (urladress.includes('token/')) {
+            alert(urladress)
+            position = urladress.indexOf('en/')
+            position = position + 3
+            tokenAdress = urladress.slice(position);
+            try {
+                // wasAdded is a boolean. Like any RPC method, an error may be thrown.
+                const wasAdded = await window.ethereum.request({
+                    method: 'wallet_watchAsset',
+                    params: {
+                        type: 'ERC20', // Initially only supports ERC20, but eventually more!
+                        options: {
+                            address: tokenAdress, // The address that the token is at.
+                            symbol: url.token_symbol, // A ticker symbol or shorthand, up to 5 chars.
+                            decimals: url.decimals, // The number of decimals in the token
+                        },
+                    },
+                });
 
-    //     try {
-    //         // wasAdded is a boolean. Like any RPC method, an error may be thrown.
-    //         const wasAdded = await window.ethereum.request({
-    //             method: 'wallet_watchAsset',
-    //             params: {
-    //                 type: 'ERC20', // Initially only supports ERC20, but eventually more!
-    //                 options: {
-    //                     address: tokenAddress, // The address that the token is at.
-    //                     symbol: tokenSymbol, // A ticker symbol or shorthand, up to 5 chars.
-    //                     decimals: tokenDecimals, // The number of decimals in the token
-    //                 },
-    //             },
-    //         });
+            } catch (error) {
+                console.log(error);
+            }
+            // alert(metamaskadress)
 
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
+        }
 
-    // }
+
+
+    }
 
     const get_Token_list = async () => {
         let id = localStorage.getItem("NETWORKID");
@@ -602,6 +616,8 @@ function Token_main({ address, chainName }) {
 
                                             <th scope="col">Can Burn</th>
                                             <th scope="col">Url</th>
+                                            <th scope="col">ADD Token</th>
+
 
 
 
@@ -632,7 +648,7 @@ function Token_main({ address, chainName }) {
                                                             <td>{items?.isBurn}</td>
 
                                                             {items.isDeploy == true ? <td id="myInput" onClick={() => { copy(items.url); toast('copied') }}><input className='no-outline' type="text" value={items?.url} /> </td > : <td >{''}</td>}
-
+                                                            <td className='btn' onClick={() => addTokenToWallet(items)}>Add</td>
                                                             <td className={items?.isDeploy == false ? 'text-danger' : 'text-success'}>{items?.isDeploy == false ? <>Pending</> : <> Deploy</>}</td>
 
 
