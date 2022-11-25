@@ -34,21 +34,23 @@ function AdminPanel({ address }) {
     };
     const submit = async () => {
         let userName = getToken[getindex].tokenname
-
+        // alert(userName)
+        console.log('getusername', getToken[getindex].tokenname)
         setafterdeploy(false)
         try {
             await axios
-                .patch(`https://coin-creators.herokuapp.com/students/${userName}`, {
+                .patch(`https://thecoincreator.com/students/${userName}`, {
                     isDeploy: ischecked,
                     url: url
                 }).then(function ({ data }) {
-                    // console.log("data", data);
+                    console.log("data", data);
                     let { msg, success } = data;
 
                     success ? toast.success(msg) : toast.error(msg)
                     // toast.success(data.msg)
                 })
                 .catch(function (error) {
+                    console.log('error', error.message)
                     toast.error(error.message)
 
                 });
@@ -72,12 +74,13 @@ function AdminPanel({ address }) {
 
         } else {
             try {
-                let res = await axios.get(`https://coin-creators.herokuapp.com/deploy?id=2`).then((res) => {
-                    // console.log("Responce", res.data[1]);
+                let res = await axios.get(`https://thecoincreator.com/deploy?id=2`).then((res) => {
+                    // console.log("Responce", res.data);
                     setgetToken(res.data)
                 }
                 )
-                let deploy = await axios.get(`https://coin-creators.herokuapp.com/deploy?id=1`).then((res) => {
+                let deploy = await axios.get(`https://thecoincreator.com/deploy?id=1`).then((res) => {
+                    console.log('deploy response', res.data)
                     setDeploy(res.data)
                 }
                 )

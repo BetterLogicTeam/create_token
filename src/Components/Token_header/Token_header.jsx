@@ -33,7 +33,7 @@ function Token_header({ setAddress, setchainName }) {
     { name: "binance", id: 97, networkName: 'binance' },
     { name: "ethereum", id: 1, networkName: 'ethereum' },
     { name: "polygon", id: 80001, networkName: 'MumbaiTestNet' },
-    { name: "avalanche", id: 43114, networkName: 'avalanche' },
+    // { name: "avalanche", id: 43114, networkName: 'avalanche' },
     { name: "tron", id: 1230, networkName: 'tron' },
   ];
   let mainAccount = ''

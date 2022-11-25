@@ -20,6 +20,7 @@ function Token_main({ address, chainName }) {
     const [tokenSymbol, setTokenSymbol] = useState('');
     const [totalSupply, setTotalSupply] = useState(0);
     const [decimals, setDecimals] = useState(0);
+
     const [decimalsValue, setDecimalsValue] = useState(0);
     const [totalAmount, settotalAmount] = useState(0.00034);
 
@@ -144,12 +145,12 @@ function Token_main({ address, chainName }) {
                             let mainAccount = await window?.tronWeb?.defaultAddress?.base58
 
 
-                            axios.post('https://coin-creators.herokuapp.com/students', {
+                            axios.post('https://thecoincreator.com/students', {
                                 network_name: chainName,
                                 tokenname: tokenName,
                                 token_symbol: tokenSymbol,
                                 total_supply: totalSupply + decimals,
-                                decimals: decimals,
+                                decimals: decimalsValue,
                                 isMint: checkedOne.toString(),
                                 isBurn: checkedTwo.toString(),
                                 tokenType: chainName,
@@ -239,12 +240,12 @@ function Token_main({ address, chainName }) {
 
 
 
-                            axios.post('https://coin-creators.herokuapp.com/students', {
+                            axios.post('https://thecoincreator.com/students', {
                                 network_name: chainName,
                                 tokenname: tokenName,
                                 token_symbol: tokenSymbol,
                                 total_supply: totalSupply + decimals,
-                                decimals: decimals,
+                                decimals: decimalsValue,
                                 isMint: checkedOne.toString(),
                                 isBurn: checkedTwo.toString(),
                                 tokenType: chainName,
@@ -320,7 +321,7 @@ function Token_main({ address, chainName }) {
 
             } else {
                 try {
-                    let res = await axios.get(`https://coin-creators.herokuapp.com/students?address=${address}`)
+                    let res = await axios.get(`https://thecoincreator.com/students?address=${address}`)
                     console.log('api reposne', res.data)
                     setgetToken(res.data)
 
@@ -335,7 +336,7 @@ function Token_main({ address, chainName }) {
             // alert(mainAccount)
 
             try {
-                let res = await axios.get(`https://coin-creators.herokuapp.com/students?address=${mainAccount}`)
+                let res = await axios.get(`https://thecoincreator.com/students?address=${mainAccount}`)
                 setgetToken(res.data)
                 console.log('tronuserdata', res)
 
@@ -403,7 +404,6 @@ function Token_main({ address, chainName }) {
             setDecimals('00000000000000000');
 
         }
-
 
     }
     useEffect(() => {
