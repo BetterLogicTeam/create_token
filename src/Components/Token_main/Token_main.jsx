@@ -216,7 +216,6 @@ function Token_main({ address, chainName }) {
                             //     from: address,
                             // });
                             // toast.success(" Transaction Successfull")
-                            alert(decimals)
 
                             try {
 
