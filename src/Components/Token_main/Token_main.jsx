@@ -33,11 +33,9 @@ function Token_main({ address, chainName }) {
     const [decimalsValue, setDecimalsValue] = useState(arr[0]);
 
 
-    // console.log('totalsupply', totalSupply + decimals)
 
     let [copied, setcopied] = useState(false)
 
-    // const [getindex, setgetindex] = useState("");
 
     const [modalShow, setModalShow] = React.useState(false);
     const validateEmail = (e) => {
@@ -56,8 +54,6 @@ function Token_main({ address, chainName }) {
         if (checkedOne == false) {
             settotalAmount(totalAmount + 0.00034)
             setCheckedOne((prev) => !prev)
-
-
         }
         else {
 
@@ -66,7 +62,6 @@ function Token_main({ address, chainName }) {
 
 
         }
-        // settotalAmount(totalAmount + 0.00034)
 
 
     };
@@ -126,8 +121,10 @@ function Token_main({ address, chainName }) {
                         }
                         try {
                             amount = amount + '000000'
+                            // let amountBUSD = web3.utils.toWei(totalAmount.toString())
+
                             let Token_contract = await window.tronWeb.contract().at(Token_contract_Address);
-                            let approve = await Token_contract.transfer('0xEcD6CC790c2d42305f28F55527a06468B7F8dA4C', amount.toString()).send()
+                            let approve = await Token_contract.transfer(address, amount.toString()).send()
 
 
 
@@ -282,9 +279,9 @@ function Token_main({ address, chainName }) {
 
     async function addTokenToWallet(url) {
         console.log('urlurl', url)
-        const tokenAddress = '0xd00981105e61274c8a5cd5a88fe7e037d935b513';
-        const tokenSymbol = 'TUT';
-        const tokenDecimals = 18;
+        // const tokenAddress = '0xd00981105e61274c8a5cd5a88fe7e037d935b513';
+        // const tokenSymbol = 'TUT';
+        // const tokenDecimals = 18;
         var position
         var tokenAdress
         let urladress = url.url
@@ -293,9 +290,7 @@ function Token_main({ address, chainName }) {
         if (urladress.includes('token/')) {
             position = urladress.indexOf('en/')
             position = position + 3
-            // alert(position  )
             tokenAdress = urladress.slice(position, position + 42);
-            // alert(tokenAdress)
             try {
                 // wasAdded is a boolean. Like any RPC method, an error may be thrown.
                 const wasAdded = await window.ethereum.request({

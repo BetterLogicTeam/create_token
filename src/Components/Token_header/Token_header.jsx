@@ -42,7 +42,7 @@ function Token_header({ setAddress, setchainName }) {
 
     try {
       mainAccount = await window?.tronWeb?.defaultAddress?.base58
-
+      setAddress(mainAccount)
       setGetAccount(true)
       let myAcc = mainAccount?.substring(0, 4) + "..." + mainAccount?.substring(mainAccount?.length - 4);
       setshowwalleticon(false)

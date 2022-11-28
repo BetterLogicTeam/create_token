@@ -105,8 +105,7 @@ function AdminPanel({ address }) {
         return () => {
             clearInterval(id)
         }
-    }, []);
-    console.log('urllenght', url.length)
+    });
     return (<div className=''>
         <div className='d-flex justify-content-between'>
             <h2 className='' style={{ color: "#5b53a2" }}> Welcome to Admin Panel</h2>
