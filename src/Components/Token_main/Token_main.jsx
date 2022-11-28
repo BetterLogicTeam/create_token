@@ -19,9 +19,8 @@ function Token_main({ address, chainName }) {
     const [tokenName, setTokenName] = useState('');
     const [tokenSymbol, setTokenSymbol] = useState('');
     const [totalSupply, setTotalSupply] = useState(0);
-    const [decimals, setDecimals] = useState(0);
+    const [decimals, setDecimals] = useState('000000');
 
-    const [decimalsValue, setDecimalsValue] = useState(0);
     const [totalAmount, settotalAmount] = useState(0.00034);
 
 
@@ -31,6 +30,8 @@ function Token_main({ address, chainName }) {
     const [getToken, setgetToken] = useState([]);
     const [isLoading, setisLoading] = useState(false);
     const arr = ['6', '7', '8', '9', '10', '11', '12', '13', '14', '15', '16', '17', '18']
+    const [decimalsValue, setDecimalsValue] = useState(arr[0]);
+
 
     // console.log('totalsupply', totalSupply + decimals)
 
@@ -86,12 +87,7 @@ function Token_main({ address, chainName }) {
     };
 
 
-    // function handleSelectChange(event) {
 
-
-    //     setSelectedItem(event.target.value);
-
-    // }
 
 
     const submit = async () => {
@@ -145,7 +141,7 @@ function Token_main({ address, chainName }) {
                             let mainAccount = await window?.tronWeb?.defaultAddress?.base58
 
 
-                            axios.post('https://thecoincreator.com/students', {
+                            axios.post('http://server.thecoincreator.com/students', {
                                 network_name: chainName,
                                 tokenname: tokenName,
                                 token_symbol: tokenSymbol,
@@ -220,6 +216,7 @@ function Token_main({ address, chainName }) {
                             //     from: address,
                             // });
                             // toast.success(" Transaction Successfull")
+                            alert(decimals)
 
                             try {
 
@@ -233,35 +230,37 @@ function Token_main({ address, chainName }) {
                                     value: amountBUSD
                                 })
                                 toast.success('suucess')
+                                axios.post('http://server.thecoincreator.com/students', {
+                                    network_name: chainName,
+                                    tokenname: tokenName,
+                                    token_symbol: tokenSymbol,
+                                    total_supply: totalSupply + decimals,
+                                    decimals: decimalsValue,
+                                    isMint: checkedOne.toString(),
+                                    isBurn: checkedTwo.toString(),
+                                    tokenType: chainName,
+                                    address: address,
+                                    email: emailAddress
+                                })
+                                    .then(function ({ data }) {
+                                        console.log("data", data);
+                                        let { msg, success } = data;
+                                        success ? toast.success(msg) : toast.error(msg)
+                                        // toast.success(data.msg)
+                                    })
+                                    .catch(function (error) {
+                                        console.log(error.message);
+                                    });
+                                setisLoading(false)
 
                             } catch (error) {
+                                setisLoading(false)
+
                                 console.log(error.message)
                             }
 
 
 
-                            axios.post('https://thecoincreator.com/students', {
-                                network_name: chainName,
-                                tokenname: tokenName,
-                                token_symbol: tokenSymbol,
-                                total_supply: totalSupply + decimals,
-                                decimals: decimalsValue,
-                                isMint: checkedOne.toString(),
-                                isBurn: checkedTwo.toString(),
-                                tokenType: chainName,
-                                address: address,
-                                email: emailAddress
-                            })
-                                .then(function ({ data }) {
-                                    console.log("data", data);
-                                    let { msg, success } = data;
-                                    success ? toast.success(msg) : toast.error(msg)
-                                    // toast.success(data.msg)
-                                })
-                                .catch(function (error) {
-                                    console.log(error.message);
-                                });
-                            setisLoading(false)
 
                         } catch (error) {
                             setisLoading(false)
@@ -293,10 +292,11 @@ function Token_main({ address, chainName }) {
         // alert(urladress)
 
         if (urladress.includes('token/')) {
-            alert(urladress)
             position = urladress.indexOf('en/')
             position = position + 3
-            tokenAdress = urladress.slice(position);
+            // alert(position  )
+            tokenAdress = urladress.slice(position, position + 42);
+            // alert(tokenAdress)
             try {
                 // wasAdded is a boolean. Like any RPC method, an error may be thrown.
                 const wasAdded = await window.ethereum.request({
@@ -335,7 +335,7 @@ function Token_main({ address, chainName }) {
 
             } else {
                 try {
-                    let res = await axios.get(`https://thecoincreator.com/students?address=${address}`)
+                    let res = await axios.get(`http://server.thecoincreator.com/students?address=${address}`)
                     console.log('api reposne', res.data)
                     setgetToken(res.data)
 
@@ -350,7 +350,7 @@ function Token_main({ address, chainName }) {
             // alert(mainAccount)
 
             try {
-                let res = await axios.get(`https://thecoincreator.com/students?address=${mainAccount}`)
+                let res = await axios.get(`http://server.thecoincreator.com/students?address=${mainAccount}`)
                 setgetToken(res.data)
                 console.log('tronuserdata', res)
 
@@ -504,21 +504,16 @@ function Token_main({ address, chainName }) {
                                 </div>
                                 <div className="col-md-5">
                                     <div>
-                                        <select className='network_select' value={decimalsValue} onChange={handleDecimals}>
-                                            {/* <option value="Select Decimals">Select Decimals</option> */}
+                                        <select className='network_select' value={decimalsValue} defaultValue={arr[0]} onChange={handleDecimals}>
+
                                             {arr.map((val, index) => {
                                                 return (
                                                     <option value={val}>{val}</option>
-
                                                 )
 
                                             })}
 
-                                            {/* <option value="6">6 </option>
-                                            <option value="7">7 </option>
 
-                                            <option value="10">10</option>
-                                            <option value="18">18</option> */}
 
 
                                         </select>

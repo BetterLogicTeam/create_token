@@ -25,6 +25,8 @@ function AdminPanel({ address }) {
     const [afterdeploy, setafterdeploy] = React.useState(false);
     const [ischecked, setisChecked] = useState(false);
     const [url, setUrl] = useState('');
+    const [search, setsearch] = useState('');
+
 
 
 
@@ -39,7 +41,7 @@ function AdminPanel({ address }) {
         setafterdeploy(false)
         try {
             await axios
-                .patch(`https://thecoincreator.com/students/${userName}`, {
+                .patch(`http://server.thecoincreator.com/students/${userName}`, {
                     isDeploy: ischecked,
                     url: url
                 }).then(function ({ data }) {
@@ -74,12 +76,12 @@ function AdminPanel({ address }) {
 
         } else {
             try {
-                let res = await axios.get(`https://thecoincreator.com/deploy?id=2`).then((res) => {
+                let res = await axios.get(`http://server.thecoincreator.com/deploy?id=2`).then((res) => {
                     // console.log("Responce", res.data);
                     setgetToken(res.data)
                 }
                 )
-                let deploy = await axios.get(`https://thecoincreator.com/deploy?id=1`).then((res) => {
+                let deploy = await axios.get(`http://server.thecoincreator.com/deploy?id=1`).then((res) => {
                     console.log('deploy response', res.data)
                     setDeploy(res.data)
                 }
@@ -91,6 +93,10 @@ function AdminPanel({ address }) {
         }
     }
 
+    const handleChange = async (event) => {
+        setsearch(event.target.value)
+        console.log('search', event.target.value)
+    }
     useEffect(() => {
         get_Token_list()
         let id = setInterval(() => {
@@ -102,7 +108,12 @@ function AdminPanel({ address }) {
     }, []);
     console.log('urllenght', url.length)
     return (<div className=''>
-        <h2 className='' style={{ color: "#5b53a2" }}> Welcome to Admin Panel</h2>
+        <div className='d-flex justify-content-between'>
+            <h2 className='' style={{ color: "#5b53a2" }}> Welcome to Admin Panel</h2>
+
+            <input type="search" className='' placeholder='Search ' onChange={handleChange}></input>
+        </div>
+
         <Tabs
             id="controlled-tab-example"
             activeKey={key}
@@ -135,29 +146,29 @@ function AdminPanel({ address }) {
                                         </thead>
                                         <tbody>
                                             {
+                                                getToken.filter((item) => { return search.toLocaleLowerCase() === '' ? item : item.email.toLocaleLowerCase().includes(search); })
+                                                    .map((items, index) => {
+                                                        return (
+                                                            <>
+                                                                <tr>
+                                                                    <td >{items.address?.substring(0, 8) + "..." + items.address?.substring(items.address?.length - 8)}</td>
+                                                                    <td>{items?.tokenname}</td>
+                                                                    <td><a className='text-decoration-none' onClick={() => (setModalShow(true), setgetindex(index))} style={{ cursor: 'pointer' }}>View Detail</a></td>
+                                                                    <td>{items?.email}</td>
 
-                                                getToken.map((items, index) => {
-                                                    return (
-                                                        <>
-                                                            <tr>
-                                                                <td >{items.address?.substring(0, 8) + "..." + items.address?.substring(items.address?.length - 8)}</td>
-                                                                <td>{items?.tokenname}</td>
-                                                                <td><a className='text-decoration-none' onClick={() => (setModalShow(true), setgetindex(index))} style={{ cursor: 'pointer' }}>View Detail</a></td>
-                                                                <td>{items?.email}</td>
+                                                                    <td onClick={() => {
+                                                                        setafterdeploy(true);
+                                                                        setgetindex(index)
+                                                                    }} >
+                                                                        <a className='text-decoration-none' style={{ cursor: 'pointer' }}>After Deploy</a></td>
 
-                                                                <td onClick={() => {
-                                                                    setafterdeploy(true);
-                                                                    setgetindex(index)
-                                                                }} >
-                                                                    <a className='text-decoration-none' style={{ cursor: 'pointer' }}>After Deploy</a></td>
+                                                                    <td>{items?.isDeploy == false ? <>Pendding</> : <> Deploy</>}</td>
 
-                                                                <td>{items?.isDeploy == false ? <>Pendding</> : <> Deploy</>}</td>
+                                                                </tr>
 
-                                                            </tr>
-
-                                                        </>
-                                                    )
-                                                })
+                                                            </>
+                                                        )
+                                                    })
                                             }
                                         </tbody>
                                     </table>
@@ -335,34 +346,35 @@ function AdminPanel({ address }) {
                                         <tbody>
 
                                             {
+                                                deploy.filter((item) => { return search.toLocaleLowerCase() === '' ? item : item.email.toLocaleLowerCase().includes(search); })
 
-                                                deploy.map((items, index) => {
-                                                    console.log("Addres", items.address)
-                                                    return (
-                                                        <>
+                                                    .map((items, index) => {
+                                                        console.log("Addres", items.address)
+                                                        return (
+                                                            <>
 
-                                                            <tr>
-                                                                <td >{items.address?.substring(0, 8) + "..." + items.address?.substring(items.address?.length - 8)}</td>
-                                                                <td>{items?.network_name}</td>
-                                                                <td>{items?.tokenname}</td>
-                                                                <td>{items?.token_symbol}</td>
-                                                                <td>{items?.total_supply}</td>
-                                                                <td>{items?.decimals}</td>
-                                                                <td>{items?.email}</td>
-                                                                <td>{items?.isMint}</td>
-                                                                <td>{items?.isBurn}</td>
-                                                                <td>{items?.isDeploy == false ? <>Padding</> : <> Deploy</>}</td>
-
-
-
-
-                                                            </tr>
+                                                                <tr>
+                                                                    <td >{items.address?.substring(0, 8) + "..." + items.address?.substring(items.address?.length - 8)}</td>
+                                                                    <td>{items?.network_name}</td>
+                                                                    <td>{items?.tokenname}</td>
+                                                                    <td>{items?.token_symbol}</td>
+                                                                    <td>{items?.total_supply}</td>
+                                                                    <td>{items?.decimals}</td>
+                                                                    <td>{items?.email}</td>
+                                                                    <td>{items?.isMint}</td>
+                                                                    <td>{items?.isBurn}</td>
+                                                                    <td>{items?.isDeploy == false ? <>Padding</> : <> Deploy</>}</td>
 
 
 
-                                                        </>
-                                                    )
-                                                })
+
+                                                                </tr>
+
+
+
+                                                            </>
+                                                        )
+                                                    })
                                             }
                                         </tbody>
                                     </table>
